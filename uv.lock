@@ -1,0 +1,12 @@
+version = 1
+revision = 3
+requires-python = ">=3.11"
+
+[options]
+exclude-newer = "2026-08-16T15:15:14.747081Z"
+exclude-newer-span = "P7D"
+
+[[package]]
+name = "aesthetic-taste"
+version = "0.1.0"
+source = { editable = "." }
