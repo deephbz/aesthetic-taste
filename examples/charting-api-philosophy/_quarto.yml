@@ -1,0 +1,17 @@
+project:
+  type: default
+
+execute:
+  enabled: false
+
+format:
+  html:
+    embed-resources: false
+    page-layout: full
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-summary: Show source
+    css: styles/report.css
+    include-in-header: styles/report-head.html
+    title-block-banner: false

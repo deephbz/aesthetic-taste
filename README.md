@@ -40,4 +40,12 @@ uv build
 ```
 
 This repository contains only the reusable CLI, its tests, and its governing
-documents. Report examples and generated report artifacts stay outside it.
+documents, plus reproducible example source bundles. Generated report artifacts
+stay outside Git history.
+
+## Example
+
+[`examples/charting-api-philosophy`](examples/charting-api-philosophy) contains
+the source for the API-to-pixels architecture report. GitHub Actions rebuilds
+it with `report`, renders it with Quarto, and deploys the result to
+[GitHub Pages](https://deephbz.github.io/aesthetic-taste/).

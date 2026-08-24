@@ -1,0 +1,116 @@
+{
+  "schema_version": "2.0.0",
+  "measured_at": "2026-08-23T13:15:00Z",
+  "dataset": {
+    "path": "data/markouts.arrow",
+    "rows": 1600,
+    "columns": 12,
+    "arrow_ipc_bytes": 180618,
+    "python_dataframe_memory_bytes": 206852,
+    "python_row_json_bytes": 412710
+  },
+  "authored_payloads": {
+    "pandas_table_html_bytes": 468485,
+    "ag_grid_fragment_bytes": 4836,
+    "perspective_fragment_bytes": 4215,
+    "bokeh_histogram_fragment_bytes": 16137,
+    "ag_grid_standalone_bytes": 4963,
+    "perspective_standalone_bytes": 4343,
+    "bokeh_histogram_standalone_bytes": 17392
+  },
+  "quarto_browser": {
+    "section": {
+      "light_dom_serialized_bytes": 430319,
+      "composed_projection_elements": 21808,
+      "note": "Sum of the four projection roots. Shadow DOM is included only in the composed element count."
+    },
+    "pandas": {
+      "rows": 1600,
+      "cells": 19212,
+      "dom_elements": 20821,
+      "serialized_dom_bytes": 361128
+    },
+    "ag_grid": {
+      "arrow_fetch_bytes": 180618,
+      "model_rows": 1600,
+      "json_equivalent_row_bytes": 412708,
+      "rendered_row_nodes": 24,
+      "dom_elements": 458,
+      "serialized_dom_bytes": 67348,
+      "shadow_roots": 0
+    },
+    "perspective": {
+      "arrow_fetch_bytes": 180618,
+      "model_rows": 1600,
+      "view_arrow_bytes": 156216,
+      "saved_config_bytes": 456,
+      "dom_elements": 310,
+      "serialized_dom_bytes": 1079,
+      "shadow_roots": 7
+    },
+    "bokeh_histogram": {
+      "arrow_fetch_bytes": 180618,
+      "model_rows": 1600,
+      "json_equivalent_row_bytes": 412708,
+      "histogram_bins": 48,
+      "histogram_source_bytes": 503,
+      "dom_elements": 219,
+      "serialized_dom_bytes": 764,
+      "shadow_roots": 26
+    },
+    "network": {
+      "arrow_request_count": 1
+    }
+  },
+  "jupyterlab_browser": {
+    "section": {
+      "light_dom_serialized_bytes": 529957,
+      "composed_projection_elements": 21752
+    },
+    "pandas": {
+      "rows": 1600,
+      "cells": 19212,
+      "dom_elements": 20821,
+      "serialized_dom_bytes": 468783
+    },
+    "ag_grid": {
+      "arrow_fetch_bytes": 180618,
+      "model_rows": 1600,
+      "json_equivalent_row_bytes": 412708,
+      "rendered_row_nodes": 24,
+      "dom_elements": 412,
+      "serialized_dom_bytes": 59654,
+      "shadow_roots": 0
+    },
+    "perspective": {
+      "arrow_fetch_bytes": 180618,
+      "model_rows": 1600,
+      "view_arrow_bytes": 156216,
+      "saved_config_bytes": 456,
+      "dom_elements": 310,
+      "serialized_dom_bytes": 845,
+      "shadow_roots": 7
+    },
+    "bokeh_histogram": {
+      "arrow_fetch_bytes": 180618,
+      "model_rows": 1600,
+      "json_equivalent_row_bytes": 412708,
+      "histogram_bins": 48,
+      "histogram_source_bytes": 503,
+      "dom_elements": 209,
+      "serialized_dom_bytes": 675,
+      "shadow_roots": 25
+    },
+    "network": {
+      "arrow_request_count": 1
+    }
+  },
+  "interpretation": [
+    "The host makes one Arrow HTTP request and gives each browser adapter an isolated buffer copy.",
+    "AG Grid and Bokeh materialize JavaScript row objects after Arrow decoding.",
+    "Perspective accepts Arrow bytes directly and this adapter creates no JSON row copy.",
+    "AG Grid virtualizes 1600 model rows into 24 measured row nodes at the accepted viewport.",
+    "The Bokeh fragment is 15.8 KiB and loads one pinned Bokeh core script instead of embedding BokehJS.",
+    "Host whitespace normalization and viewport geometry change serialized DOM bytes and virtualized element counts without changing semantic rows."
+  ]
+}

@@ -1,0 +1,218 @@
+:root {
+  --ink: #172126;
+  --muted: #5e6b70;
+  --paper: #f6f3ec;
+  --card: #fffdf8;
+  --line: #d9d3c6;
+  --blue: #2764ae;
+  --teal: #0d7c76;
+  --orange: #c35c22;
+  --violet: #7656a6;
+  --red: #b8423e;
+}
+
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 8% 4%, rgba(39, 100, 174, 0.08), transparent 24rem),
+    radial-gradient(circle at 92% 12%, rgba(195, 92, 34, 0.07), transparent 25rem),
+    var(--paper);
+}
+
+#quarto-content {
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+#title-block-header.quarto-title-block.default .quarto-title .title {
+  max-width: 960px;
+  font-size: clamp(2.4rem, 5vw, 5.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+}
+
+h2 {
+  margin-top: 4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  margin-top: 2.2rem;
+  letter-spacing: -0.015em;
+}
+
+.report-hero,
+.library-card,
+.method-card,
+.finding-card,
+.trace-card {
+  background: color-mix(in srgb, var(--card) 94%, white 6%);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(31, 45, 51, 0.06);
+}
+
+.report-hero {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.5rem;
+  padding: clamp(1.4rem, 3vw, 2.5rem);
+  margin: 1rem 0 2.4rem;
+}
+
+.report-hero h2 {
+  border: 0;
+  margin: 0 0 0.8rem;
+  padding: 0;
+  font-size: clamp(1.7rem, 3vw, 3.1rem);
+}
+
+.hero-kicker,
+.card-kicker,
+.evidence-tag {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.73rem;
+  font-weight: 750;
+  color: var(--orange);
+}
+
+.hero-grid,
+.library-grid,
+.trace-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.hero-stat,
+.library-card,
+.trace-card {
+  padding: 1.1rem 1.2rem;
+}
+
+.hero-stat strong {
+  display: block;
+  font-size: 1.55rem;
+  letter-spacing: -0.035em;
+}
+
+.hero-stat span,
+.trace-card dt {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.method-card,
+.finding-card {
+  padding: 1.2rem 1.4rem;
+  margin: 1.1rem 0;
+}
+
+.method-card code,
+.finding-card code {
+  color: var(--blue);
+}
+
+.flow-strip {
+  display: flex;
+  align-items: stretch;
+  gap: 0.55rem;
+  margin: 1rem 0 1.5rem;
+  overflow-x: auto;
+  padding: 0.2rem 0 0.7rem;
+}
+
+.flow-node {
+  min-width: 150px;
+  flex: 1 0 150px;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+
+.flow-node strong,
+.flow-node span {
+  display: block;
+}
+
+.flow-node strong {
+  color: var(--blue);
+  font-size: 0.9rem;
+}
+
+.flow-node span {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.flow-arrow {
+  align-self: center;
+  color: var(--orange);
+  font-size: 1.25rem;
+}
+
+.library-card h3 {
+  margin: 0.3rem 0 0.5rem;
+}
+
+.library-card p:last-child {
+  margin-bottom: 0;
+}
+
+.trace-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 1rem 0 1.5rem;
+}
+
+.trace-card dl {
+  margin: 0;
+}
+
+.trace-card dd {
+  margin: 0.15rem 0 0.65rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 680;
+}
+
+.cell-output iframe {
+  width: 100%;
+  min-height: 520px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: white;
+}
+
+.compact-table {
+  font-size: 0.82rem;
+}
+
+.evidence-tag[data-kind="observed"] { color: var(--teal); }
+.evidence-tag[data-kind="documented"] { color: var(--blue); }
+.evidence-tag[data-kind="assessed"] { color: var(--violet); }
+
+pre {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+table {
+  background: rgba(255, 253, 248, 0.75);
+}
+
+@media (max-width: 900px) {
+  .report-hero,
+  .hero-grid,
+  .library-grid,
+  .trace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flow-strip {
+    align-items: center;
+  }
+}

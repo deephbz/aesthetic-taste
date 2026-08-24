@@ -1,0 +1,156 @@
+{
+  "purpose": "Primary sources for ARCHITECTURE-GUIDE.md",
+  "checked_on": "2026-08-23",
+  "sources": [
+    {
+      "system": "Matplotlib",
+      "url": "https://matplotlib.org/stable/tutorials/artists.html",
+      "supports": "FigureCanvas, Renderer, Artist, primitive, and container layers."
+    },
+    {
+      "system": "Vega",
+      "url": "https://vega.github.io/vega/docs/",
+      "supports": "Specification vocabulary and reactive runtime overview."
+    },
+    {
+      "system": "Vega",
+      "url": "https://vega.github.io/vega/docs/api/parser/",
+      "supports": "Specification parsing into a runtime dataflow description."
+    },
+    {
+      "system": "Vega",
+      "url": "https://vega.github.io/vega/docs/api/view/",
+      "supports": "View construction, dataflow evaluation, signals, state, scenegraph, and rendering."
+    },
+    {
+      "system": "Vega",
+      "url": "https://vega.github.io/vega/docs/signals/",
+      "supports": "Signals as reactive values updated by events, APIs, or upstream signals."
+    },
+    {
+      "system": "Vega",
+      "url": "https://vega.github.io/vega/docs/event-streams/",
+      "supports": "Event streams as sources for interaction and signal updates."
+    },
+    {
+      "system": "Vega",
+      "url": "https://vega.github.io/vega/docs/marks/",
+      "supports": "Mark definitions, encode sets, backing data, and scenegraph items."
+    },
+    {
+      "system": "Vega",
+      "url": "https://vega.github.io/vega/docs/api/debugging/",
+      "supports": "Public signal, data, state, and scenegraph inspection; private runtime warning."
+    },
+    {
+      "system": "Vega-Lite",
+      "url": "https://vega.github.io/vega-lite/docs/",
+      "supports": "High-level grammar compiled into Vega."
+    },
+    {
+      "system": "Vega-Lite",
+      "url": "https://vega.github.io/vega-lite/docs/selection.html",
+      "supports": "Selection parameters as direct-manipulation-driven data queries."
+    },
+    {
+      "system": "Observable runtime",
+      "url": "https://github.com/observablehq/runtime",
+      "supports": "Variables and modules connected through a reactive dependency graph."
+    },
+    {
+      "system": "Observable notebooks",
+      "url": "https://observablehq.com/documentation/cells/javascript",
+      "supports": "Cell dependencies, topological evaluation, and reactive re-evaluation."
+    },
+    {
+      "system": "D3",
+      "url": "https://d3js.org/d3-selection",
+      "supports": "Selections as data-driven DOM transformation."
+    },
+    {
+      "system": "D3",
+      "url": "https://d3js.org/d3-selection/joining",
+      "supports": "Keyed data joins and enter, update, and exit relations."
+    },
+    {
+      "system": "Observable Plot",
+      "url": "https://observablehq.com/plot/features/marks",
+      "supports": "Mark objects, channels, scales, and layered graphical output."
+    },
+    {
+      "system": "Observable Plot",
+      "url": "https://observablehq.com/plot/features/plots",
+      "supports": "Plot rendering returns an SVG or HTML figure element."
+    },
+    {
+      "system": "Bokeh",
+      "url": "https://docs.bokeh.org/en/latest/docs/reference/document/document.html",
+      "supports": "Document roots, Model selection, change events, validation, and serialization."
+    },
+    {
+      "system": "Bokeh",
+      "url": "https://docs.bokeh.org/en/latest/docs/reference/document/models.html",
+      "supports": "Document model graph as Models reachable through references from roots."
+    },
+    {
+      "system": "Bokeh",
+      "url": "https://docs.bokeh.org/en/latest/docs/reference/models/sources.html",
+      "supports": "ColumnDataSource selection and synchronization state."
+    },
+    {
+      "system": "Bokeh",
+      "url": "https://docs.bokeh.org/en/latest/docs/user_guide/interaction/js_callbacks.html",
+      "supports": "Standalone browser property and event callbacks."
+    },
+    {
+      "system": "Plotly",
+      "url": "https://plotly.com/python/graph-objects/",
+      "supports": "Generated Python classes over a machine-readable figure schema."
+    },
+    {
+      "system": "Plotly",
+      "url": "https://plotly.com/python/figure-structure/",
+      "supports": "Figure data, layout, frames, traces, subplots, and config."
+    },
+    {
+      "system": "Plotly",
+      "url": "https://plotly.com/javascript/plotlyjs-events/",
+      "supports": "Browser interaction and relayout or restyle event payloads."
+    },
+    {
+      "system": "HoloViews",
+      "url": "https://holoviews.org/user_guide/Plots_and_Renderers.html",
+      "supports": "Element and container mapping to backend-specific Plot classes."
+    },
+    {
+      "system": "HoloViews",
+      "url": "https://holoviews.org/reference_manual/holoviews.plotting.renderer.html",
+      "supports": "Renderer, Plot state, backend output, and get_plot escape hatch."
+    },
+    {
+      "system": "Datashader",
+      "url": "https://datashader.org/getting_started/Pipeline.html",
+      "supports": "Canvas, glyph projection, pixel aggregation, and transfer pipeline."
+    },
+    {
+      "system": "Perspective",
+      "url": "https://perspective-dev.github.io/guide/explanation/table.html",
+      "supports": "Typed updateable Table and immutable schema."
+    },
+    {
+      "system": "Perspective",
+      "url": "https://perspective-dev.github.io/guide/how_to/javascript/save_restore.html",
+      "supports": "Serializable viewer, view, plugin, and workspace state."
+    },
+    {
+      "system": "Perspective",
+      "url": "https://perspective-dev.github.io/viewer/classes/dist_wasm_perspective-viewer.d.ts.PerspectiveViewerElement.html",
+      "supports": "Viewer load, save, restore, selection, view access, resize, and render APIs."
+    },
+    {
+      "system": "Perspective",
+      "url": "https://perspective-dev.github.io/viewer/interfaces/dist_esm_plugin.d.ts.IPerspectiveViewerPlugin.html",
+      "supports": "Plugin draw, update, resize, restyle, save, and restore lifecycle."
+    }
+  ]
+}
