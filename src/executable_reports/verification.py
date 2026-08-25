@@ -218,10 +218,15 @@ class _ReportHandler(SimpleHTTPRequestHandler):
 
     def send_head(self) -> Any:
         self._range = None
+        path = self.translate_path(self.path)
+        if urlsplit(self.path).path == "/favicon.ico" and not os.path.isfile(path):
+            self.send_response(HTTPStatus.NO_CONTENT)
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return None
         header = self.headers.get("Range")
         if not header:
             return super().send_head()
-        path = self.translate_path(self.path)
         if not os.path.isfile(path):
             return super().send_head()
         stream = open(path, "rb")
