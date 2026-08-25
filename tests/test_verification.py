@@ -196,6 +196,8 @@ class StaticReportServerTests(unittest.TestCase):
                     self.assertEqual(response.read(), b"rro")
                 with urllib.request.urlopen(url.rsplit("/", 1)[0] + "/module.wasm") as response:
                     self.assertEqual(response.headers.get_content_type(), "application/wasm")
+                with urllib.request.urlopen(url.rsplit("/", 1)[0] + "/favicon.ico") as response:
+                    self.assertEqual(response.status, 204)
 
 
 class VerifyCommandTests(unittest.TestCase):
