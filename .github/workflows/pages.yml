@@ -45,6 +45,15 @@ jobs:
         run: >-
           uv run --no-config report inspect examples/charting-api-philosophy --render
           > examples/charting-api-philosophy/evidence/report-inspection.json
+      - name: Verify browser runtime
+        shell: bash
+        run: |
+          browser="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"
+          test -n "$browser"
+          REPORT_BROWSER_PATH="$browser" \
+            uv run --no-config --with playwright report verify \
+            examples/charting-api-philosophy --timeout 30 \
+            > examples/charting-api-philosophy/evidence/report-verification.json
       - name: Stage Pages artifact
         run: uv run --no-config python scripts/stage_example_site.py
       - uses: actions/configure-pages@v6.0.0

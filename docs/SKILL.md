@@ -7,7 +7,7 @@ description: Use for fast human-agent authoring and efficient static report serv
 
 Read `principles.md` for the report contract. Read `report-cli-design.md` for
 artifact names, commands, and failure rules. This guide adds only the live
-authoring and serving procedure.
+authoring, serving, and browser-debugging procedure.
 
 ## Iterate in a live kernel
 
@@ -15,7 +15,8 @@ authoring and serving procedure.
 2. Rerun only the changed cells or sections.
 3. Use `%autoreload 3` when reusable local modules change.
 4. If available, use Jupyter MCP for cell-aware kernel operations.
-5. Before release, run one clean `report run`, `report render`, and `report inspect`.
+5. Before release, run one clean `report run`, `report render`, `report inspect`,
+   and `report verify`.
 
 ## Coordinate human and agent edits
 
@@ -30,3 +31,15 @@ Serve the report root through HTTP. Do not open fetch-based reports with a
 `file:` URL. Enable Brotli compression and keep gzip as fallback. Prefer HTTP/2
 or HTTP/3 when the host supports it. Use system fonts to avoid webfont requests.
 Set long immutable cache headers only for content-hashed resources.
+
+## Investigate browser failures
+
+Start from `report.verify.json`, not from a new browser harness. Read the first
+problem and run its `diagnostics.quick_start` call from the report root. Use the
+problem selector, when present, for a targeted screenshot and DOM/layout extraction; add a
+trace only when the generic receipt is insufficient.
+
+For library-specific inspection, use `browser_session()` and query the
+renderer-owned public API, such as a Bokeh model, Perspective saved state, or AG
+Grid API. Keep semantic acceptance checks in `window.__REPORT_VERIFY__` rather
+than coupling the generic verifier to private renderer internals.

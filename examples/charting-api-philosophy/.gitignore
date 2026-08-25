@@ -16,3 +16,5 @@
 /report.static/
 /report.inventory.json
 /report.inspect.html
+/report.verify.json
+/report.verify.png

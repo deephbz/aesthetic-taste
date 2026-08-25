@@ -24,7 +24,7 @@ dependencies = []
 Repository = "https://github.com/deephbz/aesthetic-taste"
 
 [project.scripts]
-report = "executable_reports.cli:main"
+report = "executable_reports.app:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/executable_reports"]
