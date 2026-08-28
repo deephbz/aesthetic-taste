@@ -2,7 +2,8 @@
 
 Aesthetic Taste is a small package for inspectable research-report tools. Its
 first tool is `report`, a command-line workflow from Jupytext source to an
-executed notebook, Quarto HTML, and a machine-readable artifact inventory.
+executed notebook, Quarto HTML, a machine-readable artifact inventory, and an
+optional real-browser verification receipt.
 
 ## Install
 
@@ -14,6 +15,15 @@ report --help
 Quarto is a separate system dependency. A generated report project records its
 Python execution dependencies in its own `pyproject.toml` and `uv.lock`.
 
+Browser verification is optional. Install the Playwright Python package in the
+same tool environment and either use an existing Chrome/Chromium executable or
+install Playwright Chromium:
+
+```sh
+uv tool install --with playwright git+https://github.com/deephbz/aesthetic-taste.git
+uvx playwright install chromium
+```
+
 ## Use
 
 ```sh
@@ -22,10 +32,20 @@ report run my-report --uv
 report render my-report
 report inspect my-report
 report inspect my-report --render
+report verify my-report
 ```
 
-`report inspect` writes JSON to standard output. `--render` also creates the
-human projection `report.inspect.html` from that same inspection record.
+`report inspect` answers **what did we build?** It checks saved artifacts,
+hashes, notebook outputs, sizes, and parsed HTML without starting a browser.
+`report verify` answers **does it work?** It serves the static bundle over
+loopback HTTP, loads it in headless Chromium, and writes `report.verify.json`
+plus `report.verify.png`.
+
+The verification receipt records runtime errors, failed resources,
+high-confidence layout failures, detected view roots, and an optional
+`window.__REPORT_VERIFY__` result. Every failure points to small pre-1.0 Python
+diagnostic helpers that can reopen the report, inspect one selector, capture a
+targeted screenshot, or record a Playwright trace.
 
 Read [the principles](docs/principles.md) for the report contract, [the CLI
 design](docs/report-cli-design.md) for tool behavior, and [the collaboration
@@ -47,5 +67,5 @@ stay outside Git history.
 
 [`examples/charting-api-philosophy`](examples/charting-api-philosophy) contains
 the source for the API-to-pixels architecture report. GitHub Actions rebuilds
-it with `report`, renders it with Quarto, and deploys the result to
+it with `report`, renders and verifies it, and deploys the result to
 [GitHub Pages](https://deephbz.github.io/aesthetic-taste/).

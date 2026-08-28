@@ -20,4 +20,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: uv sync --locked
       - run: uv run python -m unittest discover -s tests -v
+      - name: Real-browser verifier smoke test
+        if: matrix.python-version == '3.13'
+        shell: bash
+        run: |
+          browser="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || true)"
+          test -n "$browser"
+          REPORT_BROWSER_PATH="$browser" \
+            uv run --with playwright python -m unittest discover \
+            -s tests -p 'test_verification.py' -v
       - run: uv build

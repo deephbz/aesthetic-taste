@@ -26,7 +26,11 @@ DIRECTORIES = {
 def main() -> None:
     if SITE.exists():
         raise SystemExit(f"staging directory already exists: {SITE}")
-    missing = [str(path.relative_to(REPOSITORY)) for path in (*FILES, *DIRECTORIES) if not path.exists()]
+    missing = [
+        str(path.relative_to(REPOSITORY))
+        for path in (*FILES, *DIRECTORIES)
+        if not path.exists()
+    ]
     if missing:
         raise SystemExit("missing deployment artifacts: " + ", ".join(missing))
     SITE.mkdir()

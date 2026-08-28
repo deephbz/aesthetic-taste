@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aesthetic-taste"
-version = "0.1.0"
+version = "0.2.0"
 description = "Small, inspectable tools for executable research reports"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -24,7 +24,7 @@ dependencies = []
 Repository = "https://github.com/deephbz/aesthetic-taste"
 
 [project.scripts]
-report = "executable_reports.cli:main"
+report = "executable_reports.app:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/executable_reports"]
