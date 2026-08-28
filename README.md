@@ -47,9 +47,11 @@ high-confidence layout failures, detected view roots, and an optional
 diagnostic helpers that can reopen the report, inspect one selector, capture a
 targeted screenshot, or record a Playwright trace.
 
-Read [the principles](docs/principles.md) for the report contract, [the CLI
-design](docs/report-cli-design.md) for tool behavior, and [the collaboration
-guide](docs/SKILL.md) for the live authoring and HTTP serving loop.
+Read [the principles](docs/principles.md) for the report contract, [the analysis
+authoring principles](docs/analysis-authoring.md) for notebook and reusable
+component boundaries, [the CLI design](docs/report-cli-design.md) for tool
+behavior, and [the collaboration guide](docs/SKILL.md) for the live authoring
+and HTTP serving loop.
 
 ## Develop
 
