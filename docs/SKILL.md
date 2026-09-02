@@ -5,7 +5,7 @@ description: Use for fast human-agent authoring and efficient static report serv
 
 # Executable report collaboration
 
-Read `principles.md` for the report contract. Read `report-cli-design.md` for
+Read `report-contract.md` for the report contract. Read `report-cli-design.md` for
 artifact names, commands, and failure rules. This guide adds only the live
 authoring, serving, and browser-debugging procedure.
 

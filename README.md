@@ -47,11 +47,16 @@ high-confidence layout failures, detected view roots, and an optional
 diagnostic helpers that can reopen the report, inspect one selector, capture a
 targeted screenshot, or record a Playwright trace.
 
-Read [the principles](docs/principles.md) for the report contract, [the analysis
-authoring principles](docs/analysis-authoring.md) for notebook and reusable
-component boundaries, [the CLI design](docs/report-cli-design.md) for tool
-behavior, and [the collaboration guide](docs/SKILL.md) for the live authoring
-and HTTP serving loop.
+Read [the report contract](docs/report-contract.md) for the report seen from
+outside (deployment shape, data and state authority, notebook-to-web parity),
+[report authoring](docs/report-authoring.md) for the structure of report code
+and the contract of reusable analysis components, [the CLI design](docs/report-cli-design.md)
+for tool behavior, and [the collaboration guide](docs/SKILL.md) for the live
+authoring and HTTP serving loop.
+
+The parts are at different stages. The CLI is in sharing. The report contract
+is in consolidation. Report authoring is in shaping. The example report is in
+exploration. Each document states its own stage at the top.
 
 ## Develop
 
