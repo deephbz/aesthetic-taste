@@ -6,7 +6,8 @@ description: Use for fast human-agent authoring and efficient static report serv
 # Executable report collaboration
 
 Read `report-contract.md` for the report contract. Read `report-cli-design.md` for
-artifact names, commands, and failure rules. This guide adds only the live
+artifact names, commands, and failure rules. Read `report-presentation.md` before creating presentation config or display adapters.
+This guide adds only the live
 authoring, serving, and browser-debugging procedure.
 
 ## Run the local reporting tools

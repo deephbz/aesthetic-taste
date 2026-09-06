@@ -57,7 +57,7 @@ class ReportCliTests(unittest.TestCase):
             self.assertEqual(result, 0)
             self.assertEqual(
                 sorted(path.name for path in root.iterdir()),
-                [QUARTO_CONFIG, "pyproject.toml", SOURCE],
+                [QUARTO_CONFIG, "pyproject.toml", "reading-navigation.html", SOURCE],
             )
             self.assertNotIn("uv.lock", {path.name for path in root.iterdir()})
             self.assertIn("execute:\n  enabled: false", (root / QUARTO_CONFIG).read_text())

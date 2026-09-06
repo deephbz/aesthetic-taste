@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 from typing import Sequence
 
+from .presentation import quarto_notebook, reading_frontmatter, reading_navigation
 from .artifacts import HTML, INVENTORY, NOTEBOOK, QUARTO_CONFIG, SOURCE, STATIC
 from .inspection import (
     DEFAULT_INSPECTION_HTML,
@@ -43,17 +44,13 @@ REPORT_SOURCE = """# ---
 # %%
 """
 
+REPORT_SOURCE = REPORT_SOURCE.replace("# %% [markdown]", reading_frontmatter() + "# %% [markdown]", 1)
+
 QUARTO_SOURCE = """project:
   type: default
 
 execute:
   enabled: false
-
-format:
-  html:
-    embed-resources: false
-    toc: true
-    code-fold: true
 """
 
 PROJECT_SOURCE = """[project]
@@ -107,6 +104,7 @@ def command_new(args: argparse.Namespace) -> int:
         root / "pyproject.toml": PROJECT_SOURCE.format(name=normalized_project_name(root)),
         root / SOURCE: REPORT_SOURCE,
         root / QUARTO_CONFIG: QUARTO_SOURCE,
+        root / "reading-navigation.html": reading_navigation(),
     }
     for path, content in files.items():
         path.write_text(content, encoding="utf-8")
@@ -283,19 +281,24 @@ def command_render(args: argparse.Namespace) -> int:
         if candidate.is_dir():
             shutil.rmtree(candidate)
 
-    run_command(
-        [
-            str(quarto),
-            "render",
-            NOTEBOOK,
-            "--to",
-            "html",
-            "--no-execute",
-            "--output",
-            temporary_html.name,
-        ],
-        cwd=root,
-    )
+    projection = root / "report.rendered.next.ipynb"
+    projection.write_text(json.dumps(quarto_notebook(json.loads(notebook.read_text()))), encoding="utf-8")
+    try:
+        run_command(
+            [
+                str(quarto),
+                "render",
+                projection.name,
+                "--to",
+                "html",
+                "--no-execute",
+                "--output",
+                temporary_html.name,
+            ],
+            cwd=root,
+        )
+    finally:
+        projection.unlink(missing_ok=True)
     if sha256(notebook) != notebook_hash:
         temporary_html.unlink(missing_ok=True)
         raise ReportError("Quarto changed the executed notebook; rendered output was rejected")

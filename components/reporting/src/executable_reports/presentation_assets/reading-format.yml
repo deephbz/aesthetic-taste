@@ -1,0 +1,14 @@
+mermaid-format: js
+mermaid:
+  theme: neutral
+format:
+  html:
+    embed-resources: false
+    page-layout: article
+    toc: true
+    toc-depth: 2
+    toc-expand: true
+    code-fold: true
+    code-tools: false
+    theme: default
+    include-after-body: reading-navigation.html

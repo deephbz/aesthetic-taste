@@ -85,6 +85,17 @@ Environment-specific
 └── other host-specific lifecycle concerns
 ```
 
+- **Reading orientation.** Long narrative reports must make their sections easy
+  to find. Current-section indicators must follow scrolling and layout changes.
+  Page navigation is a host-specific concern; analytical views keep the same
+  meaning across notebook and HTML hosts.
+- **Supported hosts.** Verify rendered output in JupyterLab/notebooks and in
+  an HTML bundle served by an HTTP server. Analytical meaning must agree in
+  both hosts; navigation and other host controls can differ.
+
+Presentation defaults and display-format choices live in the
+[presentation guide](report-presentation.md), not in this contract.
+
 - **Recoverable, durable reporting.** Interactive rendering is not the sole
   source of analytical meaning. Level 1 is the default: the `report` CLI
   records source, environment, and artifact provenance on every run, so every

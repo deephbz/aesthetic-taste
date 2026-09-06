@@ -48,7 +48,8 @@ Read [the report contract](docs/report-contract.md) for the report seen from
 outside (deployment shape, data and state authority, notebook-to-web parity),
 [report authoring](docs/report-authoring.md) for the structure of report code
 and the contract of reusable analysis components, [the CLI design](docs/report-cli-design.md)
-for tool behavior, and [the collaboration guide](docs/SKILL.md) for the live
+for tool behavior, [presentation defaults](docs/report-presentation.md) for reusable
+reading navigation and portable display formats, and [the collaboration guide](docs/SKILL.md) for the live
 authoring and HTTP serving loop.
 
 The parts are at different stages. The CLI is in sharing. The report contract

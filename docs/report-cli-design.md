@@ -40,7 +40,8 @@ One report owns one flat root. Fixed names remove a second report manifest:
 report.py                  authoritative Jupytext source
 pyproject.toml             report Python project and dependencies
 uv.lock                    resolved Python environment
-_quarto.yml                publication policy
+_quarto.yml                no-execution publication policy
+reading-navigation.html    editable reading-navigation source
 lib/                       optional local report modules
 report.executed.ipynb      executed display state
 report.rendered.html       HTTP publication
@@ -51,7 +52,14 @@ report.verify.json         latest real-browser verification receipt
 report.verify.png          latest initial-viewport browser evidence
 ```
 
-`new` accepts only a missing or empty root. `run` converts and executes through
+`new` accepts only a missing or empty root. It seeds the reading profile from
+`executable_reports.presentation`: format settings live in the notebook's raw
+frontmatter, and `reading-navigation.html` is a report-owned source snapshot.
+The defaults include contents, section highlighting, and scroll progress.
+Existing reports are not overwritten when the package changes. The
+[presentation guide](report-presentation.md) describes customization and reuse.
+
+ `run` converts and executes through
 temporary notebooks, records source and interpreter identity, then promotes
 the result only when the source hash is unchanged. `--uv` uses the report
 project environment. `--python` uses one explicit interpreter.
