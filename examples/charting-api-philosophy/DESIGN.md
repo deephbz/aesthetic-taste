@@ -2,10 +2,10 @@
 
 ## Stage and source allocation
 
-The report is in exploration. `PROBLEM.md` owns the question and predictions.
-`ARCHITECTURE-GUIDE.md` owns the current conceptual model and primary-source
+The report is in exploration. `research/PROBLEM.md` owns the question and predictions.
+`research/ARCHITECTURE-GUIDE.md` owns the current conceptual model and primary-source
 research. This file owns the executable lesson design. `report.py` owns the
-examples and derived traces. `RESULT.md` owns the accepted result and evidence.
+examples and derived traces. `research/RESULT.md` owns the accepted result and evidence.
 
 The architecture guide replaces the former ordinal scorecard as the report's
 main teaching structure. Scores can hide category errors. The new report uses
@@ -92,36 +92,9 @@ p95 reference. A library must not compute the p95 inside the chart grammar.
 The report can use library-native filtering for interaction, but it must label
 that as runtime state rather than analytical preparation.
 
-## Interactive labs
-
-The report publishes these kernel-free labs:
-
-- Altair/Vega-Lite: select a service, then inspect the generated Vega-Lite
-  specification and the browser Vega View state.
-- Observable runtime, D3, and Plot: change one host variable and observe a cell
-  dependency update, a direct DOM update, and a regenerated Plot DOM tree.
-- Bokeh: select points in one view and observe shared `ColumnDataSource` state
-  in a second view.
-- Plotly: inspect the stable `data/layout/frames` figure roots and browser event
-  payloads.
-- HoloViews: inspect the semantic object and the resolved Bokeh model.
-- Datashader: inspect the aggregate array and the shaded raster.
-- Perspective: inspect a saved ViewerConfig over prepared rows. Do not use a
-  group-by example as the central lesson.
-- Local Arrow loading: read one 1,600-row trade file through pandas, AG Grid,
-  Perspective, and a Bokeh histogram. AG Grid and Perspective show all rows
-  through virtualization. The pandas projection includes all rows in a bounded
-  scroll region. The Bokeh histogram computes bins after the same Arrow fetch.
-- Mosaic coordination: preserve the standalone projections, then load the same
-  Arrow file once into DuckDB-Wasm. One shared Mosaic selection drives two
-  identical detail clients and one SQL histogram client. AG Grid receives row
-  objects, Perspective receives Arrow IPC, and Bokeh receives 48 aggregate
-  rows. The system-owned plain state remains the serializable contract.
-
 ## Markout dataset contract
 
-No markout dataset exists in the workspace. The exploration therefore creates
-one deterministic synthetic fixture at `data/markouts.arrow`. It has exactly
+The lesson uses one deterministic synthetic fixture at `data/markouts.arrow`. It has exactly
 1,600 trades and these stable field groups:
 
 ~~~text
@@ -196,21 +169,6 @@ Arrow once and gives each adapter an isolated buffer copy. The adapters retain
 the existing `window.MARKOUT_*` inspection surface. Keep `BrowserDocument` only
 as the isolation fallback for incompatible CSS, dependencies, or security rules.
 
-## Section plan
-
-1. Teach the seven-layer neutral model and its non-equivalences.
-2. Establish the prepared-data and semantic-state contract.
-3. Use Matplotlib OO as the retained-object reference; place Seaborn aside.
-4. Walk Altair to Vega-Lite, Vega, dataflow, scenegraph, and SVG or Canvas.
-5. Separate Observable host reactivity, D3 DOM mutation, and Plot mark output.
-6. Compare Bokeh's public model graph with Plotly's public figure protocol.
-7. Trace HoloViews lowering and Datashader rasterization.
-8. Treat Perspective as the Table/View/viewer/plugin boundary case.
-9. Load one Arrow IPC trade file into pandas, AG Grid, Perspective, and Bokeh.
-10. Reuse those renderers behind one Mosaic and DuckDB-Wasm query plane.
-11. Give a vocabulary crosswalk and agent edit/inspect/avoid guidance.
-12. Record runtime and browser evidence, publication limits, and conclusions.
-
 ## Agent-use evaluation
 
 The report does not compute a universal score. It records three practical
@@ -225,7 +183,7 @@ This form preserves system categories and makes the next action clear.
 ## Evidence graph
 
 ```text
-ARCHITECTURE-GUIDE.md + architecture-source-notes.json
+research/ARCHITECTURE-GUIDE.md + architecture-source-notes.json
                          |
 prepared data ---------->+--> report.py
                                |

@@ -6,8 +6,8 @@ import json
 import shutil
 from pathlib import Path
 
-REPOSITORY = Path(__file__).resolve().parents[1]
-EXAMPLE = REPOSITORY / "examples" / "charting-api-philosophy"
+EXAMPLE = Path(__file__).resolve().parent
+REPOSITORY = EXAMPLE.parents[1]
 SITE = REPOSITORY / "_site"
 
 FILES = {

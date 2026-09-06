@@ -1,5 +1,9 @@
 # Executable report CLI design
 
+The implementation lives in `components/reporting/`. From the repository root,
+run commands below with `uv run --project components/reporting --no-config report ...`.
+See [repository setup](../README.md#use-reporting-tools).
+
 Stage: sharing. The interface is small and stable enough for public use. The
 artifact and browser-receipt schemas remain pre-1.0 and can change with a
 version update.

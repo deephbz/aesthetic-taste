@@ -1,73 +1,65 @@
 # Charting API philosophy
 
-An exploration-stage executable architecture lesson. It starts from
-Matplotlib's object-oriented model, then traces Vega, Observable, D3, Plot,
-Bokeh, Plotly, HoloViews, Datashader, Perspective, and AG Grid from data to
-pixels or table DOM.
+An exploration-stage architecture lesson and a concrete example of rendering
+and serving a report without an application server. It traces authoring APIs
+through runtime state to pixels, with browser labs and one shared Arrow dataset.
 
-Artifact chain:
+[DESIGN.md](DESIGN.md) owns the lesson's intent and constraints.
+The [architecture guide](research/ARCHITECTURE-GUIDE.md) owns the source-linked
+comparison; [problem](research/PROBLEM.md) and [result](research/RESULT.md) retain
+research context and accepted evidence. `report.py` is the executable source.
 
 ```text
-PROBLEM.md + ARCHITECTURE-GUIDE.md + DESIGN.md
-                       |
-                    report.py
-                   /    |    \
-            evidence  artifacts  executed notebook
-                   \    |    /
-                 Quarto HTML
+Python source + data → executed notebook + evidence → Quarto HTML bundle
+                                                        ↓
+                                                  static HTTP host
+                                                        ↓
+                                              browser JavaScript + Wasm
 ```
 
-`report.py` is the canonical executable source. The notebook is executed
-evidence. The HTML is a static publication projection.
+Python executes during generation. The published report needs static HTTP and
+network access for CDN dependencies. It needs no running Python kernel or
+application server. This is not an offline bundle.
 
-The public repository versions the reproducible source bundle, not generated
-notebooks or HTML. GitHub Actions executes this source with the packaged
-`report` CLI, renders through Quarto, and deploys the static publication to
-GitHub Pages. The workflow artifact is the persisted publication result.
+## Artifact ownership
 
-Read `PROJECT-MAP.md` for the complete authored/generated/downloaded file map,
-the version-control policy, and the exact static deployment boundary.
+- [S] Authored source: edit and version `report.py`, design/research documents,
+  styles, environment definitions, and `stage_site.py`.
+- [R] Durable result or evidence: regenerate, then persist the executed notebook,
+  machine receipts, rendered report, and dataset. Git retains the accepted
+  `data/markouts.arrow` fixture and selected evidence; CI persists its publication
+  as a workflow artifact. Generated files are not all versioned in Git.
+- [P] Browser deployment content: HTML, browser resources, styles, runtime artifacts,
+  and Arrow data selected by [stage_site.py](stage_site.py). This is a projection
+  of source and results, not another analytical authority.
+- [I] Disposable intermediate: staging directories and temporary rendering files.
+- [C] Downloaded dependency, cache, or local tool state: virtual environments,
+  package caches, and downloaded browser dependencies.
 
-Read `ARCHITECTURE-GUIDE.md` for the detailed source-linked model. The rendered
-report is its executable companion. It includes nine kernel-free browser labs
-and bounded public runtime traces. One section projects the same 1,600-trade
-Arrow IPC file through pandas, AG Grid, Perspective, and a Bokeh histogram.
-The section includes a hierarchical DOM and data-size receipt. Its three
-browser views mount directly in the host DOM and share one Arrow request.
-The next section keeps those independent adapters intact, then adds a Mosaic
-coordinator lab. One DuckDB-Wasm table supplies linked AG Grid, Perspective,
-and Bokeh clients through shared filter state and coordinated SQL queries.
+Keep reusable source in the repository, task scaffolding in the project workspace,
+and durable distributed results in shared artifact storage. Temporary directories
+are scratch. `.gitignore` controls Git inclusion; it does not define durability.
+The staging script owns the exact publication file list.
 
-## Run it
+## Run and serve
 
 From this directory:
 
-```bash
-uv run --project ../.. report run "$(pwd)" --uv
-uv run --project ../.. report render "$(pwd)"
-uv run --project ../.. report inspect "$(pwd)" --render \
-  > evidence/report-inspection.json
-uv run python -m http.server 8772 --bind 127.0.0.1
+```sh
+uv run --project ../../components/reporting --no-config report run "$(pwd)" --uv
+uv run --project ../../components/reporting --no-config report render "$(pwd)"
+uv run --project ../../components/reporting --no-config report inspect "$(pwd)" --render > evidence/report-inspection.json
+uv run --project ../../components/reporting --no-config --with playwright report verify "$(pwd)"
+python3 -m http.server 8772 --bind 127.0.0.1
 ```
 
-Open <http://127.0.0.1:8772/report.rendered.html>. Use static HTTP because the
-Perspective example fetches JavaScript and Wasm modules. It does not need a
-Python server after publication.
+Open [the report](http://127.0.0.1:8772/report.rendered.html) or
+[artifact inspection](http://127.0.0.1:8772/report.inspect.html).
+The verification command writes `report.verify.json` and `report.verify.png`.
+CI executes, renders, inspects, and verifies before staging for GitHub Pages.
 
-Open <http://127.0.0.1:8772/report.inspect.html> for the human inspection
-projection. `evidence/report-inspection.json` is its machine authority.
-
-For the equivalent JupyterLab view, trust the executed notebook and serve this
-project as the Jupyter root:
-
-```bash
-uv run --project . jupyter trust report.executed.ipynb
-jupyter-lab --no-browser --ServerApp.root_dir="$(pwd)"
-```
-
-Open `report.executed.ipynb`. The browser adapters resolve the same stable
-`data/markouts.arrow` identity through Jupyter's `/files/` route.
-
-Read `DESIGN.md` for the executable lesson contract. `RESULT.md` records the
-accepted local verification result. CI regenerates machine evidence before it
-publishes the report.
+From the repository root, `python3 examples/charting-api-philosophy/stage_site.py`
+creates `_site/` after generation. The destination must be absent.
+For notebook use, follow the shared [Jupyter setup](../../environments/README.md),
+trust `report.executed.ipynb`, and open it in JupyterLab. The browser adapters
+resolve the same Arrow file through Jupyter's `/files/` route.

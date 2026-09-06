@@ -9,6 +9,12 @@ Read `report-contract.md` for the report contract. Read `report-cli-design.md` f
 artifact names, commands, and failure rules. This guide adds only the live
 authoring, serving, and browser-debugging procedure.
 
+## Run the local reporting tools
+
+Use the cloned repository as described in [the repository guide](../README.md#use-reporting-tools).
+From its root, prefix CLI examples with `uv run --project components/reporting --no-config`.
+The `report` command below refers to that component.
+
 ## Iterate in a live kernel
 
 1. Keep one Jupyter kernel active during research.
