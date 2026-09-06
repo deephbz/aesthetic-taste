@@ -57,7 +57,7 @@ report.verify.png          latest initial-viewport browser evidence
 frontmatter, and `reading-navigation.html` is a report-owned source snapshot.
 The defaults include contents, section highlighting, and scroll progress.
 Existing reports are not overwritten when the package changes. The
-[presentation guide](report-presentation.md) describes customization and reuse.
+[presentation guide](../.agents/skills/report-presentation/SKILL.md) describes customization and reuse.
 
  `run` converts and executes through
 temporary notebooks, records source and interpreter identity, then promotes

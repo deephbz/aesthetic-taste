@@ -11,5 +11,5 @@ this component with `--project components/reporting`.
 
 The [report contract](../../docs/report-contract.md),
 [CLI design](../../docs/report-cli-design.md), and
-[presentation guide](../../docs/report-presentation.md) own the relevant design
+[presentation guide](../../.agents/skills/report-presentation/SKILL.md) own the relevant design
 boundaries. Source is in `src/executable_reports/`; tests are in `tests/`.

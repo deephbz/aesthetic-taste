@@ -1,7 +1,7 @@
 """Reusable Quarto reading defaults, not report data or renderer policy.
 
 The contract is in docs/report-contract.md; usage and ownership are in
- docs/report-presentation.md. New reports receive editable source snapshots.
+.agents/skills/report-presentation/SKILL.md. New reports receive editable source snapshots.
 Existing reports can reference these assets from their versioned source bundle.
 """
 from importlib.resources import files

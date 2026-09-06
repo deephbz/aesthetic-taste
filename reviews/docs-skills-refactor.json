@@ -1,0 +1,1168 @@
+{
+  "purpose": "Record source coverage and independent review of the documentation-to-skills refactor.",
+  "scope": "Historical verification evidence; current guidance remains in the named skills and documents.",
+  "stage": "consolidation",
+  "base_revision": "0b398b2c4f93207d0fa33c11d81e60f3b66e7fa4",
+  "intent": "Refactor report guidance into repository-scoped composable skills without losing information; combine build and verification in report-delivery.",
+  "status": "reviewed; no unresolved information-preservation gaps",
+  "sources": [
+    {
+      "id": "authoring",
+      "source": "docs/report-authoring.md",
+      "destinations": [
+        ".agents/skills/report-authoring/SKILL.md",
+        ".agents/skills/analysis-components/SKILL.md",
+        "docs/report-model.md"
+      ],
+      "source_sha256": "1482e8ddb71df681224068746a8ab10fad9d19bd10e24590972b906286a478ab"
+    },
+    {
+      "id": "contract",
+      "source": "docs/report-contract.md",
+      "destinations": [
+        "docs/report-contract.md",
+        ".agents/skills/report-authoring/references/technology-choices.md"
+      ],
+      "source_sha256": "30499ce9b25631ff4cdffe42abe885913f39c6fa3a04e63bb525ea15a47906bc"
+    },
+    {
+      "id": "presentation",
+      "source": "docs/report-presentation.md",
+      "destinations": [
+        ".agents/skills/report-presentation/SKILL.md"
+      ],
+      "source_sha256": "de960cd11cd94becbaafc670a54874752f4802a27f2ae8f0ba7e9c0aff498754"
+    },
+    {
+      "id": "delivery",
+      "source": "docs/SKILL.md",
+      "destinations": [
+        ".agents/skills/report-authoring/SKILL.md",
+        ".agents/skills/report-delivery/SKILL.md"
+      ],
+      "source_sha256": "5f3ed71c3b4e1c833b5db6e8d4f4fc152a6438e4beb632234d74e8b2e07e2812"
+    },
+    {
+      "id": "cli",
+      "source": "docs/report-cli-design.md",
+      "destinations": [
+        "docs/report-cli-design.md"
+      ],
+      "source_sha256": "a724e54624e3b727c1d6783f2aa273fe96062514468e756883e64ff96e6f56be"
+    },
+    {
+      "id": "tables",
+      "source": ".agents/skills/table-presentation/SKILL.md",
+      "destinations": [
+        ".agents/skills/table-presentation/SKILL.md"
+      ],
+      "source_sha256": "2ba9f41055a10e5aac7861e3f3efc7bdbd5f4eb21a0b56c6a9aba69d8b9af5d8"
+    },
+    {
+      "id": "table-renderers",
+      "source": ".agents/skills/table-presentation/references/renderers.md",
+      "destinations": [
+        ".agents/skills/table-presentation/references/renderers.md"
+      ],
+      "source_sha256": "93b7dd1a97942a9b7053f7336d824cfb5ce5b3fb9e395ccd1842e806ebfba82e"
+    }
+  ],
+  "initial_refactor_revision": "a5b6e8b3ec5620a068d1cd206b2ba76090399934",
+  "integration_revision_before_final_fixes": "068dd6a453666e5c6ebe7bf0e06b6dc42edeaf46",
+  "review_method": "Four independent source audits mapped each assigned semantic piece to its destination. A fifth reviewer checked skill composition and three independent entry paths. Reviewers rechecked affected pieces after fixes; unchanged evidence was reused.",
+  "locator_scope": "Source locators refer to base_revision. Destination locators identify the reviewed sections; initial findings retain historical line numbers. Final file hashes identify the integrated result.",
+  "reviews": [
+    {
+      "reviewer": "authoring",
+      "pieces": [
+        {
+          "id": "FM-01-purpose",
+          "source_locator": "docs/report-authoring.md:2-3",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:8-10; docs/report-model.md:11-16",
+          "status": "preserved",
+          "note": "Report structure is owned by the authoring skill; the report and notebook remain its white box, with shared boundaries in the model."
+        },
+        {
+          "id": "FM-02-owns",
+          "source_locator": "docs/report-authoring.md:4-6",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:8-10; .agents/skills/analysis-components/SKILL.md:8-10; docs/report-model.md:53-63",
+          "status": "preserved",
+          "note": "Layer 3 orchestration, the external Layer 2 contract, and the concrete-request procedure have distinct owners."
+        },
+        {
+          "id": "FM-03-does-not-own",
+          "source_locator": "docs/report-authoring.md:7-10",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:8-13; docs/report-contract.md:1-18; docs/report-cli-design.md:1-9; .agents/skills/analysis-components/SKILL.md:8-18; .agents/skills/report-delivery/SKILL.md:8-18",
+          "status": "preserved",
+          "note": "The complete exclusion list is now explicit in report-authoring's local scope paragraph, with links to the report contract and CLI design, and remains aligned with the component and delivery skill boundaries."
+        },
+        {
+          "id": "FM-04-stage",
+          "source_locator": "docs/report-authoring.md:11-12",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:11; .agents/skills/analysis-components/SKILL.md:11-12; docs/report-model.md:5",
+          "status": "preserved",
+          "note": "Shaping stage and the absence of a worked Layer 2 contract example remain explicit."
+        },
+        {
+          "id": "FM-05-status",
+          "source_locator": "docs/report-authoring.md:13",
+          "destination_locator": "docs/report-model.md:6",
+          "status": "preserved",
+          "note": "Active status remains in the shared model; the two task skills do not repeat it in their frontmatter."
+        },
+        {
+          "id": "FORCE-01-black-box",
+          "source_locator": "docs/report-authoring.md:20-21",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:8-10; docs/report-contract.md:15-18",
+          "status": "preserved",
+          "note": "Authoring says the report is a white box and the contract says it is a black box, with the cross-boundary relation retained."
+        },
+        {
+          "id": "FORCE-02-trial-and-error",
+          "source_locator": "docs/report-authoring.md:23-24",
+          "destination_locator": "docs/report-model.md:20-21",
+          "status": "preserved",
+          "note": "Changing questions, parameters, and useful views remain the first design force."
+        },
+        {
+          "id": "FORCE-03-messy-external-data",
+          "source_locator": "docs/report-authoring.md:24-25",
+          "destination_locator": "docs/report-model.md:21-22",
+          "status": "preserved",
+          "note": "The external and physically heterogeneous source-data force remains verbatim."
+        },
+        {
+          "id": "FORCE-04-changing-tools",
+          "source_locator": "docs/report-authoring.md:25-26",
+          "destination_locator": "docs/report-model.md:22-23",
+          "status": "preserved",
+          "note": "Concrete tools can change while semantic boundaries remain stable."
+        },
+        {
+          "id": "FORCE-05-agent-edit-surfaces",
+          "source_locator": "docs/report-authoring.md:26-27",
+          "destination_locator": "docs/report-model.md:23-24",
+          "status": "preserved",
+          "note": "Readable intent and safe edit surfaces remain the scarce resources."
+        },
+        {
+          "id": "FORCE-06-rules-can-change",
+          "source_locator": "docs/report-authoring.md:27-28",
+          "destination_locator": "docs/report-model.md:24-25",
+          "status": "preserved",
+          "note": "The rules remain conditional on the forces."
+        },
+        {
+          "id": "GLOSS-01-generic-tooling",
+          "source_locator": "docs/report-authoring.md:34",
+          "destination_locator": "docs/report-model.md:31",
+          "status": "preserved",
+          "note": "Layer 1 domain-neutral data, computation, and visualization libraries remain defined."
+        },
+        {
+          "id": "GLOSS-02-reusable-component",
+          "source_locator": "docs/report-authoring.md:35",
+          "destination_locator": "docs/report-model.md:32",
+          "status": "preserved",
+          "note": "Layer 2 semantic input to projections through one analytical perspective remains defined."
+        },
+        {
+          "id": "GLOSS-03-report-orchestration",
+          "source_locator": "docs/report-authoring.md:36",
+          "destination_locator": "docs/report-model.md:33",
+          "status": "preserved",
+          "note": "Layer 3 notebook binding and section layout remain defined."
+        },
+        {
+          "id": "GLOSS-04-dashboard-report",
+          "source_locator": "docs/report-authoring.md:37",
+          "destination_locator": "docs/report-model.md:34",
+          "status": "preserved",
+          "note": "User-directed data, parameter, and view selection with interpretation left to the user remains defined."
+        },
+        {
+          "id": "GLOSS-05-narrative-report",
+          "source_locator": "docs/report-authoring.md:38",
+          "destination_locator": "docs/report-model.md:35",
+          "status": "preserved",
+          "note": "Author-fixed inputs, evidence order, presentation, and conclusions remain defined."
+        },
+        {
+          "id": "GLOSS-06-global-setup",
+          "source_locator": "docs/report-authoring.md:39",
+          "destination_locator": "docs/report-model.md:36",
+          "status": "preserved",
+          "note": "Section 0 and its shared definitions remain defined."
+        },
+        {
+          "id": "GLOSS-07-report-configuration",
+          "source_locator": "docs/report-authoring.md:40",
+          "destination_locator": "docs/report-model.md:37",
+          "status": "preserved",
+          "note": "Shared section values owned by global setup remain defined."
+        },
+        {
+          "id": "GLOSS-08-report-section",
+          "source_locator": "docs/report-authoring.md:41",
+          "destination_locator": "docs/report-model.md:38",
+          "status": "preserved",
+          "note": "Explicit dependency boundary and section setup, wiring, and display remain defined."
+        },
+        {
+          "id": "GLOSS-09-section-entry-point",
+          "source_locator": "docs/report-authoring.md:42",
+          "destination_locator": "docs/report-model.md:39",
+          "status": "preserved",
+          "note": "The visible parameterized section operation remains defined."
+        },
+        {
+          "id": "GLOSS-10-setup-wiring-display",
+          "source_locator": "docs/report-authoring.md:43",
+          "destination_locator": "docs/report-model.md:40",
+          "status": "preserved",
+          "note": "The three report-code responsibilities at notebook and section level remain defined."
+        },
+        {
+          "id": "GLOSS-11-input-model",
+          "source_locator": "docs/report-authoring.md:44",
+          "destination_locator": "docs/report-model.md:41",
+          "status": "preserved",
+          "note": "Semantic dataset role, grain, and field-role meaning remain defined independently of literal columns."
+        },
+        {
+          "id": "GLOSS-12-field-binding",
+          "source_locator": "docs/report-authoring.md:45",
+          "destination_locator": "docs/report-model.md:42",
+          "status": "preserved",
+          "note": "Caller-declared physical-to-semantic mapping remains defined."
+        },
+        {
+          "id": "GLOSS-13-source-adapter",
+          "source_locator": "docs/report-authoring.md:46",
+          "destination_locator": "docs/report-model.md:43",
+          "status": "preserved",
+          "note": "Thin Layer 3 binding to an input model remains defined."
+        },
+        {
+          "id": "GLOSS-14-projection",
+          "source_locator": "docs/report-authoring.md:47",
+          "destination_locator": "docs/report-model.md:44",
+          "status": "preserved",
+          "note": "Derived chart/table/summary output and its non-authoritative status remain defined."
+        },
+        {
+          "id": "MODEL-terms-layer-stage",
+          "source_locator": "docs/report-authoring.md:49-52",
+          "destination_locator": "docs/report-model.md:46-49",
+          "status": "preserved",
+          "note": "Layer remains the three-level stack; component contract parts and lifecycle Stage remain distinct."
+        },
+        {
+          "id": "STRUCT-01-stack-diagram",
+          "source_locator": "docs/report-authoring.md:56-66",
+          "destination_locator": "docs/report-model.md:53-63",
+          "status": "preserved",
+          "note": "The three layers, Section 0, adapters and bindings, section pattern, report forms, component pipeline, and Layer 1 boundary remain represented; owner labels now name the composable skills."
+        },
+        {
+          "id": "STRUCT-02-execution-flow",
+          "source_locator": "docs/report-authoring.md:68-69",
+          "destination_locator": "docs/report-model.md:65-66",
+          "status": "preserved",
+          "note": "Source data to adapter/bindings to component to projections to section layout remains explicit."
+        },
+        {
+          "id": "REPORT-INTRO",
+          "source_locator": "docs/report-authoring.md:73-79",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:31-37",
+          "status": "preserved",
+          "note": "Both dashboard and narrative reports follow the same visible, thin orchestration structure, with the same human and agent editability rationale."
+        },
+        {
+          "id": "REPORT-RULE-01",
+          "source_locator": "docs/report-authoring.md:81-87",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:39-45",
+          "status": "preserved",
+          "note": "Setup, wiring, display at notebook and section levels, including order and visibility, remains verbatim."
+        },
+        {
+          "id": "REPORT-RULE-02",
+          "source_locator": "docs/report-authoring.md:89-96",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:47-54",
+          "status": "preserved",
+          "note": "Global versus section-local ownership and hidden dependency examples remain explicit."
+        },
+        {
+          "id": "REPORT-RULE-03",
+          "source_locator": "docs/report-authoring.md:98-102",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:56-60",
+          "status": "preserved",
+          "note": "The two allowed section dependency forms and promotion rule remain explicit."
+        },
+        {
+          "id": "REPORT-RULE-04",
+          "source_locator": "docs/report-authoring.md:104-112",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:62-70",
+          "status": "preserved",
+          "note": "One rich dataclass-configured entry point, choice coverage, nested grouping, and multi-view computed data remain explicit."
+        },
+        {
+          "id": "REPORT-RULE-05",
+          "source_locator": "docs/report-authoring.md:114-122",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:72-80",
+          "status": "preserved",
+          "note": "One-edit locality test, flattening guidance, and the Layer 2 versus one-off report boundary remain explicit."
+        },
+        {
+          "id": "REPORT-RULE-06",
+          "source_locator": "docs/report-authoring.md:124-128",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:82-86",
+          "status": "preserved",
+          "note": "One configuration field per dashboard widget and renderer-independent replayable state remain explicit."
+        },
+        {
+          "id": "COMPONENT-INTRO",
+          "source_locator": "docs/report-authoring.md:132-137",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:22-27",
+          "status": "preserved",
+          "note": "The external author-facing contract, implementation opacity, and semantic-input/computation/presentation pipeline shape remain explicit."
+        },
+        {
+          "id": "COMPONENT-RULE-01",
+          "source_locator": "docs/report-authoring.md:139-142",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:29-32",
+          "status": "preserved",
+          "note": "One analytical perspective, related projections, deep-module shape, and composability remain explicit."
+        },
+        {
+          "id": "COMPONENT-RULE-02",
+          "source_locator": "docs/report-authoring.md:144-158",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:34-48",
+          "status": "preserved",
+          "note": "Semantic roles and grain, type/unit conditions, nonliteral names, binding example, ambiguity rejection, and meaning-over-spelling rule remain explicit."
+        },
+        {
+          "id": "COMPONENT-RULE-03",
+          "source_locator": "docs/report-authoring.md:160-163",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:50-53",
+          "status": "preserved",
+          "note": "Thin Layer 3 adapters, record selection, bindings, required normalization, and no hidden aggregation or guessing remain explicit."
+        },
+        {
+          "id": "COMPONENT-RULE-04",
+          "source_locator": "docs/report-authoring.md:165-169",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:55-59",
+          "status": "preserved",
+          "note": "Function-of-input/configuration reproducibility, testing/tracing, inspectability, contract reference, and rendered-chart non-authority remain explicit."
+        },
+        {
+          "id": "COMPONENT-RULE-05",
+          "source_locator": "docs/report-authoring.md:171-176",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:61-66",
+          "status": "preserved",
+          "note": "Presentation semantics stay with the component while layout, neighboring order, narrative, and conclusions stay with the report."
+        },
+        {
+          "id": "REQUEST-EXAMPLE",
+          "source_locator": "docs/report-authoring.md:180-184",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:70-74",
+          "status": "preserved",
+          "note": "The resting-orders example, its axes and geometry, and the three extension requests remain intact."
+        },
+        {
+          "id": "REQUEST-PREAMBLE",
+          "source_locator": "docs/report-authoring.md:186-187",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:76-77",
+          "status": "preserved",
+          "note": "Decompose the request and confirm intended use before component implementation remains explicit."
+        },
+        {
+          "id": "REQUEST-STEP-01",
+          "source_locator": "docs/report-authoring.md:189-193",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:79-83",
+          "status": "preserved",
+          "note": "Geometry, scalar-to-colour mapping, and extensible per-level payload remain explicit."
+        },
+        {
+          "id": "REQUEST-STEP-02",
+          "source_locator": "docs/report-authoring.md:194-198",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:84-88",
+          "status": "preserved",
+          "note": "Generalize the semantic input model while fixing the visual, with the mapped measure as configuration, remains explicit."
+        },
+        {
+          "id": "REQUEST-STEP-03",
+          "source_locator": "docs/report-authoring.md:199-201",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:89-91",
+          "status": "preserved",
+          "note": "Colour map, element height, measure mapping, axis ranges, and first-request configuration point remain explicit."
+        },
+        {
+          "id": "REQUEST-STEP-04",
+          "source_locator": "docs/report-authoring.md:202-205",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:92-95",
+          "status": "preserved",
+          "note": "Requester confirmation, narrowing or extension, and building the decomposed first-request version remain explicit."
+        },
+        {
+          "id": "REQUEST-CAVEAT",
+          "source_locator": "docs/report-authoring.md:207-210",
+          "destination_locator": ".agents/skills/analysis-components/SKILL.md:97-100; .agents/skills/report-authoring/SKILL.md:83-93",
+          "status": "preserved",
+          "note": "The no-framework constraint and one component/entry point/configuration dataclass remain unconditional. The one-edit locality rule and one wiring call in one section apply when integrating the component into a report, preserving the Layer 3 boundary while keeping the independent component task complete."
+        }
+      ],
+      "findings": [
+        {
+          "id": "F-01-boundary-distribution",
+          "severity": "medium",
+          "status": "resolved",
+          "source_locator": "docs/report-authoring.md:7-10",
+          "current_locators": [
+            ".agents/skills/report-authoring/SKILL.md:8-27",
+            ".agents/skills/analysis-components/SKILL.md:8-18",
+            ".agents/skills/report-delivery/SKILL.md:8-18",
+            "docs/report-contract.md:1-18"
+          ],
+          "note": "Historical observation: the full exclusion list survived only after following several links. The authoring skill's local boundary named component implementation and published guarantees, but did not explicitly exclude deployment, data/view-state authority, parity, durability, CLI artifact/build semantics, concrete APIs, and library choices. This was a composability and routing risk, not a whole-system information loss.",
+          "resolution": "Resolved. The authoring skill now states that report-contract owns deployment shape, data/view-state authority, parity, and durability at lines 9-10; CLI design owns artifact names and build behavior at line 11; and component implementation, concrete APIs, and generic library choices remain outside its contract at lines 12-13."
+        },
+        {
+          "id": "F-02-caveat-anchor",
+          "severity": "low",
+          "status": "resolved",
+          "source_locator": "docs/report-authoring.md:207-210",
+          "current_locators": [
+            ".agents/skills/analysis-components/SKILL.md:97-100",
+            ".agents/skills/report-authoring/SKILL.md:83-93"
+          ],
+          "note": "Historical observation: the caveat's 'one-edit locality rule' label was not a heading and the link targeted the whole report-structure section. The preserved obligation was clear, but an explicit Rule 5 anchor would make the composition link safer.",
+          "resolution": "Resolved. Report-authoring now uses numbered level-3 headings, and analysis-components links directly to #5-wrap-only-as-deep-as-one-edit-can-reach at line 97. The Rule 5 obligation remains intact at lines 83-93."
+        },
+        {
+          "id": "F-03-independent-skill-status",
+          "severity": "low",
+          "status": "resolved",
+          "source_locator": "docs/report-authoring.md:11-13",
+          "current_locators": [
+            ".agents/skills/report-authoring/SKILL.md:8-14",
+            ".agents/skills/analysis-components/SKILL.md:8-12",
+            "docs/report-model.md:1-6"
+          ],
+          "note": "Historical observation: the shared model retained active status and both skills retained shaping/no-example stage context, but the task skills did not independently carry status metadata. If skills were consumed without the model, lifecycle status was less visible.",
+          "resolution": "Resolved. report-authoring states Stage: shaping and Status: active at line 14; analysis-components states both at line 11. The model still retains its active status at line 6."
+        }
+      ]
+    },
+    {
+      "reviewer": "contract",
+      "pieces": [
+        {
+          "id": "contract-governance-purpose",
+          "source_locator": "base:docs/report-contract.md:L2-L3",
+          "destination_locator": "docs/report-contract.md:L2-L3",
+          "status": "preserved",
+          "note": "The black-box purpose is unchanged."
+        },
+        {
+          "id": "contract-governance-ownership",
+          "source_locator": "base:docs/report-contract.md:L4-L6",
+          "destination_locator": "docs/report-contract.md:L4-L6; .agents/skills/report-authoring/references/technology-choices.md:L3-L5",
+          "status": "preserved-split",
+          "note": "Contract-owned deployment, data/state authority, host parity, durability, and performance remain in the contract. Dated technology advice moved to the linked reference, which points back to the contract for requirements."
+        },
+        {
+          "id": "contract-governance-boundary",
+          "source_locator": "base:docs/report-contract.md:L7-L10",
+          "destination_locator": "docs/report-contract.md:L7-L10",
+          "status": "preserved-reworded",
+          "note": "The report-authoring and CLI ownership boundaries remain explicit. The technology-change qualifier is now carried by the dated reference and the contract pointer at L131-L133."
+        },
+        {
+          "id": "contract-black-box-intro",
+          "source_locator": "base:docs/report-contract.md:L16-L19",
+          "destination_locator": "docs/report-contract.md:L15-L18",
+          "status": "preserved-relinked",
+          "note": "Definition of the contract and black-box boundary is unchanged; only the report-authoring link moved."
+        },
+        {
+          "id": "contract-scope-boundary",
+          "source_locator": "base:docs/report-contract.md:L23-L35",
+          "destination_locator": "docs/report-contract.md:L22-L34",
+          "status": "preserved",
+          "note": "All four scope rules remain: immutable read-only upstream data, static bundles, no application server by default, and browser-first execution with workload-based exceptions."
+        },
+        {
+          "id": "contract-report-data-boundary",
+          "source_locator": "base:docs/report-contract.md:L39-L42",
+          "destination_locator": "docs/report-contract.md:L38-L41",
+          "status": "preserved",
+          "note": "Bounded report-resident data and upstream large or expensive transformation rule is unchanged."
+        },
+        {
+          "id": "contract-reproducible-transformation",
+          "source_locator": "base:docs/report-contract.md:L43-L46",
+          "destination_locator": "docs/report-contract.md:L42-L45",
+          "status": "preserved",
+          "note": "Explicit-input reproducibility and clear external/environment boundary rule is unchanged."
+        },
+        {
+          "id": "contract-reconstructible-derived-state",
+          "source_locator": "base:docs/report-contract.md:L47-L50",
+          "destination_locator": "docs/report-contract.md:L46-L49",
+          "status": "preserved",
+          "note": "Caches and materialized computation remain discardable non-authoritative accelerators, with workload-based caching and no premature engineering."
+        },
+        {
+          "id": "contract-portable-view-state",
+          "source_locator": "base:docs/report-contract.md:L51-L54",
+          "destination_locator": "docs/report-contract.md:L50-L53",
+          "status": "preserved",
+          "note": "Renderer-independent shareable state, portable serialization such as URL state, and non-authoritative adapters/transient state remain explicit."
+        },
+        {
+          "id": "contract-data-compute-view-diagram",
+          "source_locator": "base:docs/report-contract.md:L56-L64",
+          "destination_locator": "docs/report-contract.md:L55-L63",
+          "status": "preserved",
+          "note": "The durable-inputs to transformation to reconstructible-materialization flow and its view branch are unchanged."
+        },
+        {
+          "id": "contract-notebook-web-parity",
+          "source_locator": "base:docs/report-contract.md:L68-L70",
+          "destination_locator": "docs/report-contract.md:L67-L69",
+          "status": "preserved",
+          "note": "Data, visualization, interaction, and view-state parity across JupyterLab and Quarto HTML remains required, with host adapters allowed."
+        },
+        {
+          "id": "contract-visual-parity-diagram",
+          "source_locator": "base:docs/report-contract.md:L72-L86",
+          "destination_locator": "docs/report-contract.md:L71-L85",
+          "status": "preserved",
+          "note": "Shared charts/tables, filters/groupings, selections, linked views, view-state, interaction semantics, and host-specific adapters are all retained."
+        },
+        {
+          "id": "contract-reading-orientation",
+          "source_locator": "base:docs/report-contract.md:L88-L91",
+          "destination_locator": "docs/report-contract.md:L87-L90",
+          "status": "preserved",
+          "note": "Section discoverability, scroll-following indicators, host-specific navigation, and stable analytical meaning remain explicit."
+        },
+        {
+          "id": "contract-supported-hosts",
+          "source_locator": "base:docs/report-contract.md:L92-L94",
+          "destination_locator": "docs/report-contract.md:L91-L93",
+          "status": "preserved",
+          "note": "JupyterLab/notebook and HTTP-served HTML verification remains required; analytical meaning must agree while navigation may differ."
+        },
+        {
+          "id": "contract-presentation-separation",
+          "source_locator": "base:docs/report-contract.md:L96-L97",
+          "destination_locator": "docs/report-contract.md:L95-L96",
+          "status": "preserved-relinked",
+          "note": "Presentation defaults and display-format choices remain explicitly outside the contract and now point to the repository skill."
+        },
+        {
+          "id": "contract-durability-levels",
+          "source_locator": "base:docs/report-contract.md:L99-L103",
+          "destination_locator": "docs/report-contract.md:L98-L102",
+          "status": "preserved",
+          "note": "Interactive rendering is not sole analytical meaning; Level 1 remains default, provenance is recorded on every CLI run, and Levels 2/3 remain user opt-ins."
+        },
+        {
+          "id": "contract-durability-diagram",
+          "source_locator": "base:docs/report-contract.md:L105-L119",
+          "destination_locator": "docs/report-contract.md:L104-L118",
+          "status": "preserved",
+          "note": "All three durability levels and their representations are unchanged."
+        },
+        {
+          "id": "contract-performance-data-representation",
+          "source_locator": "base:docs/report-contract.md:L123-L126",
+          "destination_locator": "docs/report-contract.md:L122-L125",
+          "status": "preserved",
+          "note": "Compact columnar and low-copy preference plus row/text fallback for simplicity remains unchanged."
+        },
+        {
+          "id": "contract-performance-working-set",
+          "source_locator": "base:docs/report-contract.md:L127-L130",
+          "destination_locator": "docs/report-contract.md:L126-L129",
+          "status": "preserved",
+          "note": "Browser computation, transfer, and rendering remain proportional to the current analytical view with reduction at the appropriate layer."
+        },
+        {
+          "id": "contract-tech-guidance-status",
+          "source_locator": "base:docs/report-contract.md:L132-L135",
+          "destination_locator": ".agents/skills/report-authoring/references/technology-choices.md:L7-L10; docs/report-contract.md:L131-L133",
+          "status": "preserved-split",
+          "note": "The dated 2026 guidance remains non-normative, independently changeable, and explicitly subordinate to the contract."
+        },
+        {
+          "id": "contract-tech-authoring-publication",
+          "source_locator": "base:docs/report-contract.md:L137-L141",
+          "destination_locator": ".agents/skills/report-authoring/references/technology-choices.md:L12-L16",
+          "status": "preserved-moved",
+          "note": "JupyterLab authoring, Quarto static publication, client-side widgets, no Python kernel requirement, and Quarto citation are unchanged."
+        },
+        {
+          "id": "contract-tech-data-browser",
+          "source_locator": "base:docs/report-contract.md:L142-L147",
+          "destination_locator": ".agents/skills/report-authoring/references/technology-choices.md:L17-L22",
+          "status": "preserved-moved",
+          "note": "Arrow IPC, Parquet, conditional DuckDB-Wasm, and the simpler direct data-to-renderer path plus Arrow citation are unchanged."
+        },
+        {
+          "id": "contract-tech-coordination",
+          "source_locator": "base:docs/report-contract.md:L148-L155",
+          "destination_locator": ".agents/skills/report-authoring/references/technology-choices.md:L23-L30",
+          "status": "preserved-moved",
+          "note": "Replaceable layers, renderer-native simple views, conditional Mosaic, Mosaic pre-production qualifier, and optional DatasetRef/DAG/identity/cache optimizations are unchanged."
+        },
+        {
+          "id": "contract-tech-citations",
+          "source_locator": "base:docs/report-contract.md:L157-L159",
+          "destination_locator": ".agents/skills/report-authoring/references/technology-choices.md:L32-L34",
+          "status": "preserved-moved",
+          "note": "All three reference URLs are retained exactly."
+        }
+      ],
+      "findings": [
+        {
+          "id": "F-CONTRACT-1",
+          "severity": "low",
+          "status": "resolved",
+          "source_locator": "base:docs/report-contract.md:L4-L6",
+          "destination_locator": ".agents/skills/report-authoring/references/technology-choices.md:L3-L5",
+          "note": "Resolved: the reference now says it owns dated architecture advice for report architecture, matching the preserved data interchange, browser compute, and coordination coverage. The contract and report-authoring routing keep the material reachable, with no information loss."
+        }
+      ]
+    },
+    {
+      "reviewer": "delivery",
+      "pieces": [
+        {
+          "id": "skill-meta-and-scope",
+          "source_locator": "docs/SKILL.md:1-11",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:1-18; .agents/skills/report-delivery/SKILL.md:1-18",
+          "status": "preserved_split",
+          "note": "The old collaboration skill metadata, report-contract/CLI/presentation references, and live-authoring/serving/browser-debugging scope are split across the two task skills. The split also adds explicit ownership boundaries for saved outputs and live kernel work. The presentation precondition is explicit in report-authoring: before creating or changing presentation configuration or display adapters, use report-presentation."
+        },
+        {
+          "id": "local-tooling-command",
+          "source_locator": "docs/SKILL.md:13-17",
+          "destination_locator": ".agents/skills/report-delivery/SKILL.md:20-24",
+          "status": "preserved",
+          "note": "Repository setup link, uv invocation, component path, and meaning of the report command remain intact."
+        },
+        {
+          "id": "live-kernel-loop",
+          "source_locator": "docs/SKILL.md:19-24",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:88-93",
+          "status": "preserved",
+          "note": "One active Jupyter kernel, changed-cell reruns, autoreload, and optional Jupyter MCP remain verbatim in the authoring skill."
+        },
+        {
+          "id": "clean-release-sequence",
+          "source_locator": "docs/SKILL.md:25-26",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:95-96; .agents/skills/report-delivery/SKILL.md:26-34",
+          "status": "preserved_split",
+          "note": "The release handoff remains a clean run/render/inspect/verify sequence, with execution details in report-delivery."
+        },
+        {
+          "id": "human-agent-edit-coordination",
+          "source_locator": "docs/SKILL.md:28-33",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:98-103",
+          "status": "preserved",
+          "note": "Jupytext source ownership, normal version-control edits, jupyter-collaboration, shared-document/cell-aware edits, and stable cell IDs remain intact."
+        },
+        {
+          "id": "static-serving-practice",
+          "source_locator": "docs/SKILL.md:35-40",
+          "destination_locator": ".agents/skills/report-delivery/SKILL.md:55-60",
+          "status": "preserved",
+          "note": "HTTP serving, file-URL prohibition, Brotli/gzip fallback, HTTP/2 or HTTP/3 preference, system fonts, and immutable cache conditions remain intact."
+        },
+        {
+          "id": "receipt-driven-browser-diagnosis",
+          "source_locator": "docs/SKILL.md:42-47",
+          "destination_locator": ".agents/skills/report-delivery/SKILL.md:62-67",
+          "status": "preserved",
+          "note": "Diagnosis still starts from report.verify.json, uses the first problem and diagnostics.quick_start, uses selector-targeted evidence, and adds traces only when needed."
+        },
+        {
+          "id": "renderer-owned-diagnostics-and-semantic-hook",
+          "source_locator": "docs/SKILL.md:49-52",
+          "destination_locator": ".agents/skills/report-delivery/SKILL.md:69-72",
+          "status": "preserved",
+          "note": "browser_session, renderer-owned public APIs, and report-owned window.__REPORT_VERIFY__ checks remain intact, including the boundary against private renderer internals."
+        },
+        {
+          "id": "cli-tool-and-stage",
+          "source_locator": "docs/report-cli-design.md:1-9",
+          "destination_locator": "docs/report-cli-design.md:1-9",
+          "status": "preserved",
+          "note": "Implementation location, command prefix, repository setup, sharing stage, public-use stability, and pre-1.0 schema qualification are unchanged."
+        },
+        {
+          "id": "cli-problem-boundary",
+          "source_locator": "docs/report-cli-design.md:11-15",
+          "destination_locator": "docs/report-cli-design.md:11-15",
+          "status": "preserved",
+          "note": "The saved publication-artifact purpose and exclusions for live kernels, durable browser sessions, data stores, and deployment infrastructure are unchanged."
+        },
+        {
+          "id": "cli-public-verbs",
+          "source_locator": "docs/report-cli-design.md:17-33",
+          "destination_locator": "docs/report-cli-design.md:17-33",
+          "status": "preserved",
+          "note": "All five commands and the inspect/verify observation-boundary help text remain unchanged."
+        },
+        {
+          "id": "artifact-model",
+          "source_locator": "docs/report-cli-design.md:35-53",
+          "destination_locator": "docs/report-cli-design.md:35-53",
+          "status": "preserved",
+          "note": "Flat report root semantics and every fixed artifact name remain unchanged."
+        },
+        {
+          "id": "new-seeding-and-presentation-source",
+          "source_locator": "docs/report-cli-design.md:55-60",
+          "destination_locator": "docs/report-cli-design.md:55-60",
+          "status": "preserved_relinked",
+          "note": "new-root restriction, presentation profile seeding, raw frontmatter, report-owned navigation snapshot, defaults, non-overwrite behavior, and customization pointer remain intact. Only the presentation-guide link moved to the repository skill."
+        },
+        {
+          "id": "run-promotion-and-environment",
+          "source_locator": "docs/report-cli-design.md:62-65",
+          "destination_locator": "docs/report-cli-design.md:62-65",
+          "status": "preserved",
+          "note": "Temporary notebook execution, source/interpreter identity, source-hash promotion guard, --uv, and explicit --python semantics remain unchanged."
+        },
+        {
+          "id": "render-inventory",
+          "source_locator": "docs/report-cli-design.md:67-69",
+          "destination_locator": "docs/report-cli-design.md:67-69",
+          "status": "preserved",
+          "note": "Quarto no-execute rendering, executed-notebook hash preservation, sidecar relocation, and inventory hash/MIME/size/HTML-structure recording remain unchanged."
+        },
+        {
+          "id": "inspect-boundary",
+          "source_locator": "docs/report-cli-design.md:71-74",
+          "destination_locator": "docs/report-cli-design.md:71-74",
+          "status": "preserved",
+          "note": "Inventory validation, drift checking, JSON authority, optional human HTML projection, separate size/count dimensions, and structure-versus-runtime evidence limit remain unchanged."
+        },
+        {
+          "id": "browser-check-scope",
+          "source_locator": "docs/report-cli-design.md:76-88",
+          "destination_locator": "docs/report-cli-design.md:76-88",
+          "status": "preserved",
+          "note": "Transient server/context and every bounded browser-health, resource, layout, renderer-root, and report-hook check remain unchanged."
+        },
+        {
+          "id": "browser-transport-and-screenshot-limits",
+          "source_locator": "docs/report-cli-design.md:90-94",
+          "destination_locator": "docs/report-cli-design.md:90-94",
+          "status": "preserved",
+          "note": "MIME and single-range transport, Arrow/Wasm/large-file rationale, fixed initial viewport, and no automated visual-taste claim remain unchanged."
+        },
+        {
+          "id": "verification-status-and-receipt",
+          "source_locator": "docs/report-cli-design.md:96-101",
+          "destination_locator": "docs/report-cli-design.md:96-101",
+          "status": "preserved",
+          "note": "Warning/error exit behavior, bounded receipt attempt on setup failure, and diagnostic rather than publication status of receipts/screenshots remain unchanged."
+        },
+        {
+          "id": "semantic-acceptance-hook",
+          "source_locator": "docs/report-cli-design.md:103-116",
+          "destination_locator": "docs/report-cli-design.md:103-116",
+          "status": "preserved",
+          "note": "The hook example and ownership split between generic browser/layout checks and application-specific facts remain unchanged."
+        },
+        {
+          "id": "diagnostic-receipt-interface",
+          "source_locator": "docs/report-cli-design.md:118-126",
+          "destination_locator": "docs/report-cli-design.md:118-126",
+          "status": "preserved",
+          "note": "Receipt-as-supported-interface, problem fields, and copy-ready diagnose_problem import remain unchanged."
+        },
+        {
+          "id": "internal-diagnostic-helpers",
+          "source_locator": "docs/report-cli-design.md:128-141",
+          "destination_locator": "docs/report-cli-design.md:128-141",
+          "status": "preserved",
+          "note": "All seven internal helper names, their purposes, pre-1.0 status, and source-inspection allowance remain unchanged."
+        },
+        {
+          "id": "failure-replacement-rules",
+          "source_locator": "docs/report-cli-design.md:143-154",
+          "destination_locator": "docs/report-cli-design.md:143-154",
+          "status": "preserved",
+          "note": "Actionable error policy, failed-output preservation, inspect warning/exit behavior, atomic verification evidence, stale screenshot removal, Quarto resolution, and root-relative paths remain unchanged."
+        },
+        {
+          "id": "verification-anchors",
+          "source_locator": "docs/report-cli-design.md:156-164",
+          "destination_locator": "docs/report-cli-design.md:156-164",
+          "status": "preserved",
+          "note": "Unit-test coverage, Python 3.11/3.13 CI, real-browser smoke job, and published charting-example verify gate remain unchanged."
+        }
+      ],
+      "findings": [
+        {
+          "id": "presentation-precondition",
+          "severity": "none",
+          "source_locator": "docs/SKILL.md:8-11",
+          "destination_locator": ".agents/skills/report-authoring/SKILL.md:24-25; .agents/skills/report-delivery/SKILL.md:17-18",
+          "status": "resolved",
+          "note": "Resolved in the current authoring skill: it now says, \"Before creating or changing presentation configuration or display adapters, use report-presentation.\" This preserves the source precondition for both initial creation and later changes; delivery still routes saved-output repairs to the same skill."
+        }
+      ]
+    },
+    {
+      "reviewer": "presentation",
+      "pieces": [
+        {
+          "id": "rp-001",
+          "source_locator": "docs/report-presentation.md:3-8",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:8-23",
+          "status": "preserved",
+          "note": "Stage, presentation ownership, supported JupyterLab/notebook and HTTP HTML hosts, report-contract ownership, and table-guide ownership remain. Links are rewritten for the skill location."
+        },
+        {
+          "id": "rp-002",
+          "source_locator": "docs/report-presentation.md:10-15",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:20-25",
+          "status": "preserved",
+          "note": "Quarto reading profile path and ownership, expanded contents, folded code, neutral Mermaid theme, raw Jupytext frontmatter, and _quarto.yml execution policy remain."
+        },
+        {
+          "id": "rp-003",
+          "source_locator": "docs/report-presentation.md:17-27",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:27-35",
+          "status": "preserved",
+          "note": "Navigation include-fragment boundary, progress bar and contents highlight, include-after-body insertion, remeasurement after layout changes, no data/analytical-state access, and JupyterLab ownership remain."
+        },
+        {
+          "id": "rp-004",
+          "source_locator": "docs/report-presentation.md:29-39",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:36-40",
+          "status": "preserved",
+          "note": "report new copies the profile and writes an editable fragment into the report source bundle; package updates do not silently alter existing reports; examples may reference the shared asset; runtime code and contract ownership remain."
+        },
+        {
+          "id": "rp-005",
+          "source_locator": "docs/report-presentation.md:42-52",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:42-52",
+          "status": "preserved",
+          "note": "Mermaid use for pipeline/API diagrams, native JupyterLab and Quarto support, GitHub-readable source, and the display example remain."
+        },
+        {
+          "id": "rp-006",
+          "source_locator": "docs/report-presentation.md:54-57",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:54-57",
+          "status": "preserved",
+          "note": "Mermaid MIME hook, text/vnd.mermaid and plain-source fallback, native JupyterLab rendering, adapter non-ownership of execution/edges/graph semantics, and requirement that edges derive from recorded calls remain."
+        },
+        {
+          "id": "rp-007",
+          "source_locator": "docs/report-presentation.md:59-65",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:59-65",
+          "status": "preserved",
+          "note": "Quarto temporary notebook projection, output order, single original code occurrence, unchanged executed-notebook hash, browser Mermaid runtime over HTTP, and no iframe/extension/raster/frontend save remain."
+        },
+        {
+          "id": "rp-008",
+          "source_locator": "docs/report-presentation.md:67-70",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:67-70",
+          "status": "preserved",
+          "note": "Pure quarto_notebook adapter path and compatibility-probe render.py pointer remain, including the prohibition on adding Quarto Markdown to the MIME bundle."
+        },
+        {
+          "id": "rp-009",
+          "source_locator": "docs/report-presentation.md:72-75",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:72-75",
+          "status": "preserved",
+          "note": "Separate diagram scopes, readable content-width labels, accTitle/accDescr accessibility, htmlLabels:false SVG text example, report-owned styling, and adapter source-carrying boundary remain."
+        },
+        {
+          "id": "rp-010",
+          "source_locator": "docs/report-presentation.md:77-84",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:77-84",
+          "status": "preserved",
+          "note": "Standard IPython representations, SVG/HTML guidance, equivalent MIME alternatives, host selection, JavaScript versus Python callback limits, iframe isolation condition, and notebook trust remain."
+        },
+        {
+          "id": "rp-011",
+          "source_locator": "docs/report-presentation.md:86-92",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:86-92",
+          "status": "preserved",
+          "note": "Compatibility-probe coverage, source-hash/host-version receipt, semantic-tables coverage, supported-host evidence limit, and generated-resource-directory serving rule remain. The probe link is corrected for the new depth."
+        },
+        {
+          "id": "rp-012",
+          "source_locator": "docs/report-presentation.md:94-97",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:94-97",
+          "status": "preserved",
+          "note": "IPython, JupyterLab, Quarto diagrams, and Quarto widgets references remain unchanged."
+        },
+        {
+          "id": "tp-001",
+          "source_locator": ".agents/skills/table-presentation/SKILL.md@0b398b2:frontmatter-23",
+          "destination_locator": ".agents/skills/table-presentation/SKILL.md:1-23",
+          "status": "preserved",
+          "note": "Skill metadata, table purpose, ownership boundaries, shaping-stage status, data/display-table framing, and report-contract/presentation cross-references remain."
+        },
+        {
+          "id": "tp-002",
+          "source_locator": ".agents/skills/table-presentation/SKILL.md@0b398b2:25-32",
+          "destination_locator": ".agents/skills/table-presentation/SKILL.md:25-32",
+          "status": "preserved",
+          "note": "Four-step application procedure and requirement to report inspected versus unverified outputs remain."
+        },
+        {
+          "id": "tp-003",
+          "source_locator": ".agents/skills/table-presentation/SKILL.md@0b398b2:34-61",
+          "destination_locator": ".agents/skills/table-presentation/SKILL.md:34-61",
+          "status": "preserved",
+          "note": "Reader-question structure, row meaning, table/chart choice, ordering, filters/top-N, omitted-data retention, row identity, side-by-side comparison, labels, title/caption/scope, anatomy diagram, hierarchy, totals, denominators, exceptions, definitions, and evidence source notes remain."
+        },
+        {
+          "id": "tp-004",
+          "source_locator": ".agents/skills/table-presentation/SKILL.md@0b398b2:63-82",
+          "destination_locator": ".agents/skills/table-presentation/SKILL.md:63-82",
+          "status": "preserved",
+          "note": "Numeric-until-rendering rule, upstream calculations, precision/rounding, small nonzero example, units/scaling/time zones, identifiers, percentage versus percentage-point distinction, missing-state distinctions, and uncertainty requirements remain."
+        },
+        {
+          "id": "tp-005",
+          "source_locator": ".agents/skills/table-presentation/SKILL.md@0b398b2:84-95",
+          "destination_locator": ".agents/skills/table-presentation/SKILL.md:84-95",
+          "status": "preserved",
+          "note": "Alignment, tabular numerals, label width/wrapping, value-unit pairing, whitespace/rules, striping condition, narrow-width behavior, and title/identity/notes retention remain."
+        },
+        {
+          "id": "tp-006",
+          "source_locator": ".agents/skills/table-presentation/SKILL.md@0b398b2:97-116",
+          "destination_locator": ".agents/skills/table-presentation/SKILL.md:97-116",
+          "status": "preserved",
+          "note": "Neutral starts, categorical versus quantitative color, accent/target emphasis, measure-defined favorability, sequential/diverging scales and domains, status labels/keys, bars/sparklines, scale and missing-data rules, and accessible logo/icon/badge use remain."
+        },
+        {
+          "id": "tp-007",
+          "source_locator": ".agents/skills/table-presentation/SKILL.md@0b398b2:118-132",
+          "destination_locator": ".agents/skills/table-presentation/SKILL.md:118-132",
+          "status": "preserved",
+          "note": "Versioned-source regeneration, derived-view ownership, value/layout checks, accessibility checks, and non-color/hover/position-only meaning remain. The host-verification link is redirected to report-delivery."
+        },
+        {
+          "id": "renderer-001",
+          "source_locator": ".agents/skills/table-presentation/references/renderers.md@0b398b2:1-151",
+          "destination_locator": ".agents/skills/table-presentation/references/renderers.md:1-151",
+          "status": "unchanged",
+          "note": "SHA-256 is identical. Renderer ownership, native-path selection, grid limitation, Mermaid ownership diagram, API map, Great Tables and Styler example, escaping guidance, and verification evidence/limits are byte-preserved."
+        },
+        {
+          "id": "links-001",
+          "source_locator": "docs/report-presentation.md:4,8; table-presentation@0b398b2:21-22,128",
+          "destination_locator": ".agents/skills/report-presentation/SKILL.md:11,13; table-presentation:21-23,128",
+          "status": "corrected",
+          "note": "The report-contract, table-presentation, report-delivery, and compatibility-probe links resolve from their new skill locations. The old docs/report-presentation.md and docs/SKILL.md paths are not retained in these owned files."
+        }
+      ],
+      "findings": [
+        {
+          "id": "F-001",
+          "severity": "resolved",
+          "path": ".agents/skills/report-presentation/SKILL.md:99-103",
+          "note": "The new Completion section adds a stronger obligation absent from the source: inspect changed display output in both hosts, check meaning/order/controls/layout, use the probe for changed mechanisms, and record limits. It is consistent with the report contract and the existing probe paragraph.",
+          "resolution": "Accepted as intentional workflow guidance. Wording now limits probe use to mechanisms it covers and permits reuse of unchanged evidence when source, tools, and hosts remain covered.",
+          "status": "resolved"
+        },
+        {
+          "id": "F-002",
+          "severity": "resolved",
+          "path": ".agents/skills/report-presentation/SKILL.md:15-16",
+          "note": "The new intro sentence assigns analytical values and graph semantics to source owners. Existing body text supports this boundary, so it adds explicit routing rather than losing information.",
+          "resolution": "Accepted as an explicit statement of the existing scope boundary; it does not extend the skill's responsibility.",
+          "status": "resolved"
+        },
+        {
+          "id": "F-003",
+          "severity": "none",
+          "path": ".agents/skills/table-presentation/SKILL.md:128; .agents/skills/report-delivery/SKILL.md:45-53",
+          "note": "The table verification link resolves to report-delivery's Verify hosts and outputs section. That section preserves the old host-check boundary and adds explicit print/spreadsheet target-representation checks.",
+          "status": "informational"
+        },
+        {
+          "id": "F-004",
+          "severity": "none",
+          "path": ".agents/skills/table-presentation/references/renderers.md:1-151",
+          "note": "No renderer guidance was lost or changed; the current file hash exactly matches the base file.",
+          "status": "informational"
+        }
+      ]
+    },
+    {
+      "reviewer": "composition",
+      "base_revision": "0b398b2c4f93207d0fa33c11d81e60f3b66e7fa4",
+      "review_revision": "a5b6e8b3ec5620a068d1cd206b2ba76090399934",
+      "recheck_revision": "be32f92 plus working-tree fixes",
+      "recheck": {
+        "scope": "Re-read only the repaired component caveat and authoring routing passage. The automatic router choice was reviewed as an accepted design decision.",
+        "changed_passages": [
+          ".agents/skills/analysis-components/SKILL.md:97-100",
+          ".agents/skills/report-authoring/SKILL.md:27-30",
+          ".agents/skills/ask-aesthetic-taste/SKILL.md:1-49"
+        ]
+      },
+      "pieces": [
+        {
+          "id": "route-table-without-build",
+          "entry": ".agents/skills/ask-aesthetic-taste/SKILL.md:16-24",
+          "destination": ".agents/skills/table-presentation/SKILL.md:25-32,118-132",
+          "status": "pass",
+          "note": "The router gives table work a direct entry point. The table skill owns source-level structure, formatting, and renderer choice, so the task can finish without report run/render; it records requested outputs as verified or unverified. The report-delivery host check is conditional for target representations."
+        },
+        {
+          "id": "route-component-without-report",
+          "entry": ".agents/skills/ask-aesthetic-taste/SKILL.md:18-20",
+          "destination": ".agents/skills/analysis-components/SKILL.md:14-18,20-107",
+          "status": "pass",
+          "note": "The component skill explicitly supports use without creating a report and owns semantic input, configuration, and projections. The rechecked no-framework caveat keeps the one-component/entry/configuration constraint unconditional, and gates one-edit locality and one-section wiring behind report integration."
+        },
+        {
+          "id": "route-existing-artifact-without-analysis",
+          "entry": ".agents/skills/ask-aesthetic-taste/SKILL.md:23-24",
+          "destination": ".agents/skills/report-delivery/SKILL.md:36-43,62-72",
+          "status": "pass",
+          "note": "The delivery skill has an independent existing-report path: inspect saved artifacts first, read an existing receipt, run browser verification only when current evidence is needed, and rebuild only when source or stale artifacts require it. No analysis execution is required by this path; the recheck did not change this route."
+        }
+      ],
+      "findings": [
+        {
+          "id": "router-invocation-mode",
+          "severity": "medium",
+          "path": ".agents/skills/ask-aesthetic-taste/SKILL.md:1-4",
+          "rule": "writing-for-agents/SKILL-MECHANICS.md:Invocation and Router skills",
+          "status": "accepted_by_design",
+          "note": "Historical observation: the broad router is model-invoked because it has a description and no disable-model-invocation flag. The skill mechanics recommend a user-invoked router when it serves only as the human index, which avoids permanent context load and competing broad triggers.",
+          "resolution": "The automatic choice is deliberate. It permits model routing from a broad report task as well as direct user invocation. No change is required unless the repository later chooses an explicit-only router."
+        },
+        {
+          "id": "component-layer3-coupling",
+          "severity": "medium",
+          "path": ".agents/skills/analysis-components/SKILL.md:97-100",
+          "rule": "Independent skill entry points must not impose a neighboring workflow; a pointer must encode the branch that triggers it.",
+          "status": "resolved",
+          "note": "Historical observation: the skill said it could be used without creating a report, but its final design caveat unconditionally required report-authoring locality, one wiring call, and one report section.",
+          "resolution": "The passage now keeps one component, entry point, and configuration dataclass unconditional, then says 'When integrating it into a report' before applying one-edit locality and one-section wiring. The component-only route is independent."
+        },
+        {
+          "id": "authoring-table-pointer",
+          "severity": "low",
+          "path": ".agents/skills/report-authoring/SKILL.md:19-27",
+          "rule": "Composable skills should point to a sibling when a distinct branch changes the next action.",
+          "status": "resolved",
+          "note": "Historical observation: report authoring pointed to component, technology, presentation, and delivery skills but lacked a table-specific pointer for direct report-authoring entry.",
+          "resolution": "The start-from-task section now conditionally routes table structure, formats, and emphasis to table-presentation at lines 29-30."
+        }
+      ],
+      "overall": "After recheck, all three requested entry paths are reachable and independent. The component-only route and authoring-to-table route are repaired. Automatic router invocation remains an accepted design choice, with the original context-load concern retained as historical review evidence."
+    }
+  ],
+  "summary": {
+    "source_pieces_reviewed": 117,
+    "independent_task_paths_checked": 3,
+    "unresolved_findings": 0,
+    "limitations": "These are source-preservation and routing reviews, not new runtime or upstream API validation. Existing code examples and evidence claims were preserved."
+  },
+  "verification": [
+    {
+      "check": "skill-format",
+      "result": "passed",
+      "count": 6,
+      "detects": "Invalid skill frontmatter or unfinished scaffold content."
+    },
+    {
+      "check": "local-links-and-headings",
+      "result": "passed",
+      "count": 82,
+      "detects": "Broken relative paths or moved section anchors."
+    },
+    {
+      "check": "python-javascript-example-preservation",
+      "result": "passed",
+      "count": 6,
+      "detects": "Example code lost or altered during source splitting."
+    },
+    {
+      "check": "git-diff-check",
+      "result": "passed",
+      "detects": "Whitespace errors introduced by edits."
+    }
+  ],
+  "final_files": [
+    {
+      "path": ".agents/skills/analysis-components/SKILL.md",
+      "sha256": "ec2635b321227fa499e1997dc34cf88f412d9b582c4d5bc7adf27740c4f958b9"
+    },
+    {
+      "path": ".agents/skills/ask-aesthetic-taste/SKILL.md",
+      "sha256": "86dfad6605dcb030c67d8416a3076d7d93f7f98d05b1fc6c4d0d1a0d7c6d5b18"
+    },
+    {
+      "path": ".agents/skills/report-authoring/SKILL.md",
+      "sha256": "d2e24bb76ade2e5a62d66792e3bc254ba5ad1beb33a192bb6004cc570b952f33"
+    },
+    {
+      "path": ".agents/skills/report-authoring/references/technology-choices.md",
+      "sha256": "eb006d40713047b6eacaf14007813d2c01f7adaa3cfda1f3003d76e72fd8e297"
+    },
+    {
+      "path": ".agents/skills/report-delivery/SKILL.md",
+      "sha256": "0eaa85f1a84c2045b0f26e4f6f1a8a2ccaa8696880c881a7d2aa60415afdd13b"
+    },
+    {
+      "path": ".agents/skills/report-presentation/SKILL.md",
+      "sha256": "598aea4c965e19e1de9959c52492a4a5d2a2dfe6674db9307465d9d6fb861d2b"
+    },
+    {
+      "path": ".agents/skills/table-presentation/SKILL.md",
+      "sha256": "504d444a090a79d8d248144f3d7df1757b377bd400f2ceaeda1ab856da57b0ef"
+    },
+    {
+      "path": ".agents/skills/table-presentation/references/renderers.md",
+      "sha256": "93b7dd1a97942a9b7053f7336d824cfb5ce5b3fb9e395ccd1842e806ebfba82e"
+    },
+    {
+      "path": "README.md",
+      "sha256": "bb0f811ff0d96d22a8c2661a6e2e1298eda65920871503e56fd8a7771c8eaa33"
+    },
+    {
+      "path": "components/reporting/README.md",
+      "sha256": "dd92d68836e6f13d18df151a9f15c4bb899c410c2899da72f1048ebd36dc70f7"
+    },
+    {
+      "path": "components/reporting/src/executable_reports/presentation.py",
+      "sha256": "d8354db0631770eb256431fbfe0cd3747af7344a65d8ee4c9b619ac78b0130c7"
+    },
+    {
+      "path": "docs/report-cli-design.md",
+      "sha256": "1e7680049214431c04a5f5293dad3acb9c7faea1080b179c7ace98370ffe04e7"
+    },
+    {
+      "path": "docs/report-contract.md",
+      "sha256": "f774d9504bb84ea9206fbde85808a931b469f1d306315b31212e2ffbe5a0f6c1"
+    },
+    {
+      "path": "docs/report-model.md",
+      "sha256": "d4aff7ba87ba62f0fde8d49b9808e3a5f3afa6771584bd4a07501f7573bd8b29"
+    },
+    {
+      "path": "docs/validation-tooling.md",
+      "sha256": "c9afd767f4cf32fc1dc0c364ae46d150b6b9a5bac0747ff41258b1e340712b1d"
+    }
+  ]
+}

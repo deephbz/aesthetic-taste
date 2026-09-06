@@ -1,8 +1,19 @@
+---
+name: report-presentation
+description: Configure report reading navigation and display output across JupyterLab and HTTP-served Quarto HTML. Use for Mermaid, MIME representations, and host display adapters.
+---
+
 # Report presentation
 
-Stage: consolidation. This guide owns presentation choices and their limits.
-The [report contract](report-contract.md) owns observable outcomes.
-Supported hosts are JupyterLab/notebooks and HTTP-served HTML bundles.
+Own presentation choices, display integration, and their limits.
+Stage: consolidation. Supported hosts are JupyterLab/notebooks and HTTP-served
+HTML bundles. The [report contract](../../../docs/report-contract.md) owns
+observable outcomes.
+
+Use [table-presentation](../table-presentation/SKILL.md) for table layout,
+value formatting, visual emphasis, and Great Tables / pandas Styler choices.
+Use [report-delivery](../report-delivery/SKILL.md) when producing or checking saved
+outputs. Analytical values and graph semantics stay with their source owners.
 
 ## Reading navigation
 
@@ -72,7 +83,7 @@ JavaScript controls can work in an HTTP-served static report. Python callbacks
 need a running kernel or application server. Use an iframe only when isolation
 is a real requirement. Normal notebook trust rules still apply.
 
-The [compatibility probe](../examples/presentation-compatibility/README.md)
+The [compatibility probe](../../../examples/presentation-compatibility/README.md)
 checks SVG, HTML, iframe HTML, mixed MIME bundles, and native Mermaid in real
 JupyterLab and HTTP-served Quarto output. Its receipt records source hashes and
 host versions. The semantic-tables checks cover actual diagrams, reading
@@ -84,3 +95,11 @@ References: [IPython display](https://ipython.readthedocs.io/en/stable/api/gener
 [JupyterLab notebooks](https://jupyterlab.readthedocs.io/en/stable/user/notebook.html),
 [Quarto diagrams](https://quarto.org/docs/authoring/diagrams.html), and
 [Quarto Jupyter widgets](https://quarto.org/docs/interactive/widgets/jupyter.html).
+
+## Completion
+
+Inspect changed display output in both supported hosts. Check meaning, output
+order, reading controls, and layout at the intended widths. Use the compatibility
+probe where it covers a changed display mechanism. Reuse unchanged verification
+evidence when it still covers the relevant source, tools, and hosts. Record the
+inspected hosts and any limits.
