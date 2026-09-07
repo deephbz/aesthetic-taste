@@ -95,23 +95,15 @@ prototype.
     a default analysis kernel, shared dependency groups, and optional component
     kernels. Consolidation.
 - **Reusable analysis components**
-  - [Component contract](.agents/skills/analysis-components/SKILL.md#layer-2-component-contract) — semantic input
-    model → computation → presentation. This is distinct from report layout and
-    generic plotting/data libraries. The contract is in shaping; this repo does
+  - [Component contract](.agents/skills/analysis-components/SKILL.md#layer-2-component-contract) — public contracts
+    for loading, normalization, computation, or visualization, with explicit
+    input/output meaning and report integration boundaries. The contract is in shaping; this repo does
     not yet provide a packaged component catalog.
 - **Meaning and checked data**
-  - [Meaning-layer design](examples/semantic-tables/DESIGN.md) — row meaning,
-    grain, semantic roles, binding, and desired composition properties. Shaping;
-    DatasetFrame is an empirical MVP, not a settled architecture.
-  - [Specifications](examples/semantic-tables/dataset_frame/specs.py) — declarations
-    usable independently of a bound dataframe or checker execution.
-  - [Dataframe validation](examples/semantic-tables/dataset_frame/checks.py) —
-    rule execution, acceptance policy evaluation, diagnostic queries, and evidence.
-    [Library comparison and borrowing candidates](examples/semantic-tables/research/ECOSYSTEM.md#validation-framework-decomposition-candidate).
-  - [Checked composition](examples/semantic-tables/DESIGN.md#prototype-computation-boundaries) — bound lazy
-    data, retained validation obligations, typed function boundaries, and diagrams
-    derived from actual calls. [Prototype package](examples/semantic-tables/dataset_frame/).
-    Validation and composition are in exploration.
+  - [Dataframe pipelines](.agents/skills/dataframe-pipelines/SKILL.md) — reusable
+    principles for independent specifications, semantic binding, portable meaning,
+    validation scope and evidence, and named computation diagrams. Shaping. These guide
+    meaning and computation inside dataframe-centric analysis components.
 - **Research reports and verification specimens**
   - [Charting API philosophy](examples/charting-api-philosophy/) — API-to-pixels
     architecture and the published example report.

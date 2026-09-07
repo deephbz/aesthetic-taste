@@ -1,6 +1,6 @@
 ---
 name: ask-aesthetic-taste
-description: Choose the repository skill or flow for report authoring, reusable analysis components, presentation, tables, or saved report delivery.
+description: Choose the repository skill or flow for report authoring, reusable analysis components, dataframe pipelines, presentation, tables, or saved report delivery.
 ---
 
 # Ask Aesthetic Taste
@@ -15,8 +15,10 @@ remain separate areas in the [repository map](../../../README.md#repository-map)
 
 - Create or revise report code, section dependencies, or a live notebook:
   use [report-authoring](../report-authoring/SKILL.md).
-- Turn a concrete analysis into a reusable component, or revise its semantic
-  input and configuration contract: use [analysis-components](../analysis-components/SKILL.md).
+- Turn a concrete analysis into a reusable component, or revise its input,
+  output, and configuration contract: use [analysis-components](../analysis-components/SKILL.md).
+- Design or review meaning, validation scope, or named computations inside a
+  dataframe-centric component: use [dataframe-pipelines](../dataframe-pipelines/SKILL.md).
 - Change reading navigation, Mermaid, or notebook/HTML display integration:
   use [report-presentation](../report-presentation/SKILL.md).
 - Design or review a table: use [table-presentation](../table-presentation/SKILL.md).
@@ -28,13 +30,15 @@ remain separate areas in the [repository map](../../../README.md#repository-map)
 ```mermaid
 flowchart TD
   A[Report authoring] -->|Reusable analysis| C[Analysis components]
+  C -->|Dataframe-centric component| F[Dataframe pipelines]
   A -->|Display integration| P[Report presentation]
   P -->|Table design| T[Table presentation]
   A -->|Saved outputs| D[Report delivery]
 ```
 
 Each node is also a direct entry point. These links are conditional, not required
-stages. Component design and table design can be used without building a report.
+stages. Component design, dataframe pipelines, and table design can be used without
+building a report.
 Delivery supports both a new build and verification of an existing artifact.
 
 ## Shared references
