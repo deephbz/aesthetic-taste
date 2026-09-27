@@ -1,0 +1,8 @@
+project:
+  type: default
+execute:
+  enabled: false
+format:
+  html:
+    toc: true
+    code-fold: true
