@@ -81,7 +81,28 @@ supports browser controls. A MIME bundle can offer alternatives, but each must
 preserve the same analysis meaning. Hosts can select different MIME types.
 JavaScript controls can work in an HTTP-served static report. Python callbacks
 need a running kernel or application server. Use an iframe only when isolation
-is a real requirement. Normal notebook trust rules still apply.
+is a real requirement.
+
+In a live JupyterLab session, use **Trust Notebook** before displaying saved
+browser-executable output. Trust allows JupyterLab to select and run rich MIME
+renderers that can execute browser code. It does not establish analytical
+correctness, and the presence of an HTML or JavaScript MIME bundle does not
+prove visible rendering.
+Check the actual output area when verifying Bokeh, Vega, widgets, or custom
+renderers. The live session model and selected-cell execution belong to the
+[notebook collaboration guide](../../../docs/notebook-collaboration.md).
+
+The baseline report workflow defines no widget dependency or widget parity
+promise. A report that uses widgets must declare and verify both host paths.
+Direct Bokeh output needs the matching `jupyter_bokeh` host renderer; normal
+Bokeh JavaScript callbacks remain host-specific behavior.
+
+Raw Vega and Vega-Lite MIME output is a JupyterLab representation. Quarto does
+not consume that MIME type as a static HTML fallback. When a report targets
+both hosts, provide an equivalent `text/html` representation and pin its
+runtime assets. The notebook-collaboration example uses pinned public CDNs for
+this fallback, so its Vega output needs network access during browser
+rendering. A self-contained offline bundle requires a separate asset decision.
 
 The [compatibility probe](../../../examples/presentation-compatibility/README.md)
 checks SVG, HTML, iframe HTML, mixed MIME bundles, and native Mermaid in real
@@ -99,7 +120,8 @@ References: [IPython display](https://ipython.readthedocs.io/en/stable/api/gener
 ## Completion
 
 Inspect changed display output in both supported hosts. Check meaning, output
-order, reading controls, and layout at the intended widths. Use the compatibility
-probe where it covers a changed display mechanism. Reuse unchanged verification
-evidence when it still covers the relevant source, tools, and hosts. Record the
-inspected hosts and any limits.
+order, reading controls, and layout at the intended widths. In JupyterLab,
+confirm notebook trust and inspect the rendered output area. Use the
+compatibility probe where it covers a changed display mechanism. Reuse unchanged
+verification evidence when it still covers the relevant source, tools, and
+hosts. Record the inspected hosts and any limits.

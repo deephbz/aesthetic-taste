@@ -54,8 +54,9 @@ does not aim to replace general data engines, build a complete business platform
 or prescribe how every business decision should be made.
 
 The work spans research and reusable tooling. The installable package currently
-provides `report`: a command-line workflow from Jupytext source to an executed
-notebook, Quarto HTML, an artifact inventory, and optional browser verification.
+provides `report`: a command-line workflow from Jupytext or native notebook
+source to an executed notebook, Quarto HTML, an artifact inventory, optional
+browser verification, and live notebook operations.
 The map below identifies the other areas and their stages of development.
 
 ## Repository map
@@ -76,7 +77,11 @@ prototype.
     notebook and HTTP-served HTML, including data/state authority and durability.
     Consolidation.
   - [Report authoring](.agents/skills/report-authoring/SKILL.md) — global setup, sections,
-    source binding, wiring, display, and live editing. Shaping.
+    source binding, wiring, display, and live editing. Structure shaping; live
+    notebook workflow consolidation.
+  - [Live notebook collaboration](docs/notebook-collaboration.md) — the shared
+    JupyterLab document, selected-cell execution, scratch kernels, trust, and
+    the one-way Jupytext export.
   - [Execution and publication](docs/report-cli-design.md) — the `report` CLI,
     saved notebooks, HTML bundles, inventories, and browser verification.
     [Implementation](components/reporting/src/executable_reports/) and [tests](components/reporting/tests/). Sharing.
@@ -113,6 +118,9 @@ prototype.
     design alternatives, validation probes, and worked data journeys.
   - [Presentation compatibility](examples/presentation-compatibility/) — display
     hooks checked in JupyterLab and HTTP-served Quarto HTML.
+  - [Notebook collaboration](examples/notebook-collaboration/) — a small
+    synthetic notebook for live cell editing, selected-cell execution, rich
+    output, and native saved-report handoff.
 
 Report tooling can be used without DatasetFrame. Validation can be called
 without the dataframe wrapper. Reusable analysis components can use other data
@@ -157,6 +165,23 @@ high-confidence layout failures, detected view roots, and an optional
 `window.__REPORT_VERIFY__` result. Every failure points to small pre-1.0 Python
 diagnostic helpers that can reopen the report, inspect one selector, capture a
 targeted screenshot, or record a Playwright trace.
+
+### Collaborate in a live notebook
+
+Use the existing JupyterLab and kernel setup in [environments](environments/README.md).
+The live `.ipynb` document is the editing authority while a human and an agent
+work together. Start with the command surface and then follow the
+[live notebook collaboration guide](docs/notebook-collaboration.md):
+
+```sh
+uv run --project components/reporting --no-config report notebook --help
+```
+
+The `report notebook` commands read and edit stable cell IDs, execute selected
+cells in a shared or scratch kernel, and export a reviewed Jupytext projection.
+Trust a local notebook before displaying browser-executable output such as
+Bokeh. Use the ordinary `report run`, `report render`, `report inspect`, and
+`report verify` path for saved delivery.
 
 ## Develop
 

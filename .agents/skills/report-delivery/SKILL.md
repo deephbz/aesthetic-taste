@@ -7,8 +7,9 @@ description: Build and check saved report outputs, or inspect and diagnose an ex
 
 Own producing and checking saved report outputs, static serving practice, and
 receipt-driven diagnosis. Live kernel work belongs to
-[report-authoring](../report-authoring/SKILL.md). Deployment infrastructure remains
-outside this workflow.
+[report-authoring](../report-authoring/SKILL.md) and the
+[notebook collaboration guide](../../../docs/notebook-collaboration.md).
+Deployment infrastructure remains outside this workflow.
 Stage: sharing for the CLI workflow; receipt and diagnostic schemas remain pre-1.0.
 
 Read the [report contract](../../../docs/report-contract.md) for the required
@@ -27,10 +28,15 @@ The `report` command below refers to that component.
 
 1. For a new report, use `report new ROOT` in a missing or empty directory.
    Use the authoring skill to create or revise its analysis.
-2. Before release, run one clean `report run`, `report render`, `report inspect`,
+2. If the report was authored in a live notebook, review the live source and
+   outputs, then use `report notebook export` to create the one-way Jupytext
+   projection. Treat that export as the source snapshot for the clean build.
+3. Before release, run one clean `report run`, `report render`, `report inspect`,
    and `report verify`, in that order. Choose the report's execution environment
-   as described in the CLI reference.
-3. Read the inspection and verification results. Investigate failed checks using
+   as described in the CLI reference. Pass a native notebook with
+   `report run --source`; preserve the same source-hash and promotion
+   guarantees.
+4. Read the inspection and verification results. Investigate failed checks using
    the procedure below, and check the requested hosts and outputs.
 
 ## Check an existing report
@@ -41,6 +47,11 @@ The `report` command below refers to that component.
    Run `report verify ROOT` when current browser evidence is needed.
 3. Use the diagnostics below to isolate failures. Rebuild when source changes or
    stale artifacts require it; verification can run independently of a build.
+
+When the input is a live notebook, `report notebook status` and `read` establish
+the current server, kernel, cell source, and output state before export. A saved
+notebook output may require notebook trust for browser execution in JupyterLab;
+the static HTML check still needs its own HTTP and browser verification.
 
 ## Verify hosts and outputs
 
@@ -77,3 +88,5 @@ Report the artifact location, checks performed, evidence receipts, and remaining
 failures or unverified outputs. A partial check supports only its stated scope;
 build completion alone does not establish release readiness. Reuse unchanged
 verification evidence when it still covers the relevant source, tools, and hosts.
+For a live notebook handoff, include the exported source snapshot and note any
+same-cell conflict, stale source/output, kernel-state, trust, or renderer limits.

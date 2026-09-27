@@ -11,17 +11,19 @@ version update.
 ## Problem and boundary
 
 The tool turns editable Python research into saved, inspectable publication
-artifacts. It does not manage live kernels, durable browser sessions, data
-stores, or deployment infrastructure.
+artifacts. The `report notebook` command group also provides the small live
+document surface needed for human-agent notebook collaboration. It does not
+manage durable browser sessions, data stores, or deployment infrastructure.
 
-The public surface has five verbs:
+The saved-report surface has five verbs:
 
 ```text
 report new ROOT
-report run ROOT (--uv | --python PATH)
-report render ROOT [--quarto PATH]
+report run ROOT (--uv | --python PATH) [--source PATH]
+report render ROOT [--quarto PATH] [--notebook PATH]
 report inspect ROOT [--render [PATH]]
 report verify ROOT [--browser PATH] [--timeout SECONDS]
+report notebook --server-json PATH [--notebook PATH] {status,read,edit,insert,move,delete,execute,eval,export} ...
 ```
 
 `report --help`, `report inspect --help`, and `report verify --help` state the
@@ -32,12 +34,27 @@ inspect  what did we build?  saved artifacts and parsed HTML
 verify   does it work?       one real Chromium execution
 ```
 
+`report notebook` owns live notebook operations. Its detailed options and
+structured output are part of the command help. The stable responsibilities
+and operator limits are documented in the [live notebook collaboration
+guide](notebook-collaboration.md):
+identify the active document and kernel, read and edit stable cell IDs, execute
+selected cells in a shared or scratch kernel, and export either a native
+notebook snapshot or a Jupytext projection. Keep connection credentials out of
+normal output.
+
+During a live session, the `.ipynb` document is the editing authority. The
+exported `.py` file is a derived review and build input. Existing `report run`
+and `report render` behavior remains available for saved report projects. The
+`--source` and `--notebook` options select native notebook inputs while
+retaining source-hash checks and promotion-on-success rules.
+
 ## Artifact model
 
 One report owns one flat root. Fixed names remove a second report manifest:
 
 ```text
-report.py                  authoritative Jupytext source
+report.py                  default authoritative Jupytext source
 pyproject.toml             report Python project and dependencies
 uv.lock                    resolved Python environment
 _quarto.yml                no-execution publication policy
@@ -59,14 +76,23 @@ The defaults include contents, section highlighting, and scroll progress.
 Existing reports are not overwritten when the package changes. The
 [presentation guide](../.agents/skills/report-presentation/SKILL.md) describes customization and reuse.
 
- `run` converts and executes through
+`run` converts and executes through
 temporary notebooks, records source and interpreter identity, then promotes
-the result only when the source hash is unchanged. `--uv` uses the report
-project environment. `--python` uses one explicit interpreter.
+the result only when the source hash is unchanged. `--source` selects a
+Jupytext source or a native `.ipynb` inside the report root; it defaults to
+`report.py`. `--uv` uses the report project environment. `--python` uses one
+explicit interpreter.
 
 `render` calls Quarto with `--no-execute`. It preserves the executed notebook
 hash, moves sidecars to `report.static/`, and records hashes, output MIME data,
-serialized sizes, and parsed HTML structure in the inventory.
+serialized sizes, and parsed HTML structure in the inventory. `--notebook`
+selects a saved `.ipynb` inside the report root; it defaults to
+`report.executed.ipynb`.
+
+For a live notebook handoff, export the reviewed notebook snapshot before the
+clean run. `render` consumes saved notebook outputs and does not execute the
+live kernel. JupyterLab trust controls browser execution of rich notebook MIME
+output; the static HTML bundle still requires its own HTTP and browser check.
 
 `inspect` validates the inventory schema and checks artifact drift. JSON is the
 default authority for agents. `--render` derives a human HTML view from the

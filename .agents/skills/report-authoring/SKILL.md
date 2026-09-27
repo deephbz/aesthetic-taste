@@ -11,7 +11,8 @@ owns deployment shape, data and view-state authority, parity, and durability.
 [CLI design](../../../docs/report-cli-design.md) owns artifact names and build behavior.
 Component implementation, concrete APIs, and generic library choices remain
 outside this skill's contract.
-Stage: shaping. Status: active. The reusable Layer 2 contract has no worked example yet.
+Stage: shaping for report structure; consolidation for live notebook collaboration.
+Status: active. The reusable Layer 2 contract has no worked example yet.
 
 ## Start from the task
 
@@ -102,26 +103,50 @@ inspected or replayed without the widget runtime. Keep that state
 renderer-independent, as [the report contract](../../../docs/report-contract.md)
 requires.
 
-## Iterate in a live kernel
+## Iterate in a live notebook
 
-1. Keep one Jupyter kernel active during research.
-2. Rerun only the changed cells or sections.
-3. Use `%autoreload 3` when reusable local modules change.
-4. If available, use Jupyter MCP for cell-aware kernel operations.
+The [live notebook collaboration guide](../../../docs/notebook-collaboration.md)
+owns the human-agent session model and the `report notebook` command contract.
+Use that guide when the task involves a running JupyterLab document or kernel.
+
+1. Start from the notebook open in JupyterLab. Run `report notebook status` and
+   `read` before editing.
+2. Address cells by their stable IDs. Edit and execute only the changed cell or
+   independent section when shared state is intentional.
+3. Use the shared kernel to inspect existing variables and renderer state. Use
+   `report notebook eval` with an isolated scratch kernel for experiments that
+   must not change the shared namespace.
+4. Read the live source and output after execution. A Python execution result
+   does not prove that the browser displayed a rich MIME output.
+5. Use `%autoreload 3` when reusable local modules change. Restart the kernel
+   when selective execution leaves state provenance unclear.
+
+The live `.ipynb` document is the editing authority during collaboration.
+Jupytext `.py` is a one-way derived projection for review and version control.
+Export it explicitly with `report notebook export`, or pass the native notebook
+to the clean `report run --source` path. Use `report render` only with saved
+outputs. Do not assume that editing the projection updates the live document.
 
 Before release, use [report-delivery](../report-delivery/SKILL.md) for the clean
 build and verification sequence.
 
 ## Coordinate human and agent edits
 
-Use Jupytext `.py` as the editable source. Let agents edit this file through
-normal version-control tools. Enable `jupyter-collaboration` so external file
-changes update JupyterLab's live document model. For simultaneous edits to one
-cell, use a shared-document or cell-aware API and address stable cell IDs.
+JupyterLab and the agent share one live document model. A human can edit or
+execute a cell while the agent works. Read the current cell before replacing
+it and inspect source and output together after execution. See the
+[collaboration guide](../../../docs/notebook-collaboration.md) for accepted
+same-cell, stale-output, and kernel-state limits.
+
+Trust the notebook in JupyterLab before displaying browser-executable output.
+The **Trust Notebook** command allows saved rich output such as Bokeh to run in
+the browser. Trust is a browser execution decision, not a data or analytical
+correctness check.
 
 ## Completion
 
 Check that each section exposes its setup, wiring, and display. Trace its inputs
 to global setup, local sources, or the explicit preceding result. Exercise the
 changed section and confirm that one intended configuration edit reaches the
-expected output. State any verification that remains incomplete.
+expected output in the live host. State any verification that remains
+incomplete and link to the collaboration guide for known session limits.
