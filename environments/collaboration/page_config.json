@@ -1,0 +1,6 @@
+{
+  "disabledExtensions": {
+    "@jupyterlab/notebook-extension:cell-executor": true,
+    "@jupyter/docprovider-extension:notebook-cell-executor": true
+  }
+}
