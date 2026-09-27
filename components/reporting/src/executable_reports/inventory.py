@@ -257,17 +257,52 @@ def static_inventory(root: Path) -> list[dict[str, Any]]:
     ]
 
 
-def build_inventory(root: Path, *, quarto_version: str | None = None) -> dict[str, Any]:
-    source = root / SOURCE
-    notebook_path = root / NOTEBOOK
+def build_inventory(
+    root: Path,
+    *,
+    quarto_version: str | None = None,
+    notebook_path: str | Path = NOTEBOOK,
+    source_path: str | Path | None = None,
+) -> dict[str, Any]:
+    """Inventory one rendered notebook without inventing source freshness.
+
+    ``source_path`` normally comes from clean-run metadata. When a caller
+    renders a native notebook without that metadata, the notebook is recorded
+    as the source snapshot and freshness stays ``unknown``.
+    """
+
+    notebook_path = Path(notebook_path)
+    if notebook_path.is_absolute() or ".." in notebook_path.parts:
+        raise InventoryError("notebook path must stay inside the report project")
+    notebook_file = root / notebook_path
+    notebook_path = Path(notebook_path.as_posix())
+    notebook = json.loads(notebook_file.read_text(encoding="utf-8"))
+    execution = notebook.get("metadata", {}).get("executable_report", {})
+    recorded_source = execution.get("source") if isinstance(execution, dict) else None
+    if source_path is None:
+        source_path = recorded_source if isinstance(recorded_source, str) else notebook_path
+    source_path = Path(source_path)
+    if source_path.is_absolute() or ".." in source_path.parts:
+        raise InventoryError("source path must stay inside the report project")
+    source_file = root / source_path
+    if not source_file.is_file():
+        # A raw native notebook has no separate source file. Record the input
+        # snapshot itself and leave freshness explicitly unknown.
+        source_path = notebook_path
+        source_file = notebook_file
+    source_path = Path(source_path.as_posix())
     html_path = root / HTML
-    notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
     html = html_path.read_text(encoding="utf-8")
     parser = HeadingParser()
     parser.feed(html)
     notebook_data = notebook_inventory(notebook)
-    source_hash = sha256(source)
+    source_hash = sha256(source_file)
     recorded_source_hash = notebook_data["execution"].get("source_sha256")
+    source_freshness = (
+        "verified"
+        if recorded_source_hash and recorded_source_hash == source_hash and source_path != notebook_path
+        else "unknown"
+    )
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -275,17 +310,18 @@ def build_inventory(root: Path, *, quarto_version: str | None = None) -> dict[st
         "status": "passed"
         if not notebook_data["error_outputs"]
         and not notebook_data["unexecuted_code_cells"]
-        and recorded_source_hash == source_hash
+        and source_freshness == "verified"
         else "warning",
         "source": {
-            "path": SOURCE,
-            "bytes": source.stat().st_size,
+            "path": source_path.as_posix(),
+            "bytes": source_file.stat().st_size,
             "sha256": source_hash,
+            "freshness": source_freshness,
         },
         "notebook": {
-            "path": NOTEBOOK,
-            "bytes": notebook_path.stat().st_size,
-            "sha256": sha256(notebook_path),
+            "path": notebook_path.as_posix(),
+            "bytes": notebook_file.stat().st_size,
+            "sha256": sha256(notebook_file),
             **notebook_data,
         },
         "html": {

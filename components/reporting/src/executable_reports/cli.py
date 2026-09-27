@@ -10,6 +10,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from typing import Sequence
 
@@ -75,8 +76,13 @@ def project_root(value: str | Path) -> Path:
     return Path(value).expanduser().resolve()
 
 
-def run_command(command: Sequence[str], *, cwd: Path) -> subprocess.CompletedProcess[str]:
-    result = subprocess.run(command, cwd=cwd, text=True, capture_output=True, check=False)
+def run_command(
+    command: Sequence[str],
+    *,
+    cwd: Path,
+    env: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
+    result = subprocess.run(command, cwd=cwd, env=env, text=True, capture_output=True, check=False)
     if result.returncode:
         detail = result.stderr.strip() or result.stdout.strip()
         raise ReportError(f"command failed ({result.returncode}): {' '.join(command)}\n{detail}")
@@ -129,23 +135,86 @@ def execution_prefix(args: argparse.Namespace, root: Path) -> list[str]:
     return [str(python)]
 
 
+def _input_path(root: Path, value: str, *, label: str) -> tuple[Path, str]:
+    """Resolve an explicit report input while keeping it inside the report root."""
+
+    candidate = Path(value).expanduser()
+    if not candidate.is_absolute():
+        candidate = root / candidate
+    path = candidate.resolve()
+    try:
+        relative = path.relative_to(root)
+    except ValueError as error:
+        raise ReportError(f"{label} must stay inside the report project: {value}") from error
+    if not path.is_file():
+        raise ReportError(f"missing {label}: {path}")
+    if path.name in {
+        ".report.unexecuted.ipynb",
+        ".report.executed.next.ipynb",
+        ".report.rendered.next.ipynb",
+    }:
+        raise ReportError(f"{label} cannot use a report temporary artifact: {path.name}")
+    return path, relative.as_posix()
+
+
+def _execution_kernel(
+    prefix: Sequence[str], root: Path
+) -> tuple[str, tempfile.TemporaryDirectory[str], dict[str, str]]:
+    """Create a private kernelspec whose argv starts with the selected interpreter."""
+
+    kernel_name = "executable-report-python"
+    kernel_temp = tempfile.TemporaryDirectory(prefix=".report-kernel-", dir=root)
+    kernel_root = Path(kernel_temp.name)
+    kernel_dir = kernel_root / "kernels" / kernel_name
+    kernel_dir.mkdir(parents=True, exist_ok=True)
+    (kernel_dir / "kernel.json").write_text(
+        json.dumps(
+            {
+                "argv": [*prefix, "-m", "ipykernel_launcher", "-f", "{connection_file}"],
+                "display_name": "Executable report selected Python",
+                "language": "python",
+            }
+        ),
+        encoding="utf-8",
+    )
+    environment = os.environ.copy()
+    existing = environment.get("JUPYTER_PATH")
+    environment["JUPYTER_PATH"] = str(kernel_root) + (
+        os.pathsep + existing if existing else ""
+    )
+    return kernel_name, kernel_temp, environment
+
+
 def command_run(args: argparse.Namespace) -> int:
     root = project_root(args.root)
-    source = root / SOURCE
-    if not source.is_file():
-        raise ReportError(f"missing report source: {source}")
+    source, source_name = _input_path(root, args.source or SOURCE, label="report source")
+    if source.resolve() == (root / NOTEBOOK).resolve():
+        raise ReportError("report source cannot be the generated executed notebook")
     prefix = execution_prefix(args, root)
     temporary_input = root / ".report.unexecuted.ipynb"
     temporary_output = root / ".report.executed.next.ipynb"
+    kernel_name, kernel_temp, environment = _execution_kernel(prefix, root)
     source_hash = sha256(source)
     for path in (temporary_input, temporary_output):
         path.unlink(missing_ok=True)
 
     try:
-        run_command(
-            [*prefix, "-m", "jupytext", "--to", "ipynb", SOURCE, "--output", temporary_input.name],
-            cwd=root,
-        )
+        if source.suffix.lower() == ".ipynb":
+            shutil.copy2(source, temporary_input)
+        else:
+            run_command(
+                [
+                    *prefix,
+                    "-m",
+                    "jupytext",
+                    "--to",
+                    "ipynb",
+                    source_name,
+                    "--output",
+                    temporary_input.name,
+                ],
+                cwd=root,
+            )
         run_command(
             [
                 *prefix,
@@ -157,12 +226,14 @@ def command_run(args: argparse.Namespace) -> int:
                 temporary_input.name,
                 "--output",
                 temporary_output.name,
+                f"--ExecutePreprocessor.kernel_name={kernel_name}",
                 f"--ExecutePreprocessor.timeout={args.timeout}",
             ],
             cwd=root,
+            env=environment,
         )
         if sha256(source) != source_hash:
-            raise ReportError("report.py changed during execution; the output was not promoted")
+            raise ReportError(f"{source_name} changed during execution; the output was not promoted")
         runtime = run_command(
             [
                 *prefix,
@@ -173,8 +244,10 @@ def command_run(args: argparse.Namespace) -> int:
         )
         notebook = json.loads(temporary_output.read_text(encoding="utf-8"))
         notebook.setdefault("metadata", {})["executable_report"] = {
-            "source": SOURCE,
+            "source": source_name,
             "source_sha256": source_hash,
+            "source_kind": "notebook" if source.suffix.lower() == ".ipynb" else "jupytext",
+            "execution_mode": "clean",
             "executed_at": dt.datetime.now(tz=dt.timezone.utc).isoformat(),
             "environment": "project_uv" if args.uv else "external_python",
             **json.loads(runtime.stdout.strip()),
@@ -184,8 +257,9 @@ def command_run(args: argparse.Namespace) -> int:
     finally:
         temporary_input.unlink(missing_ok=True)
         temporary_output.unlink(missing_ok=True)
+        kernel_temp.cleanup()
 
-    print(f"Executed {SOURCE} -> {NOTEBOOK}")
+    print(f"Executed {source_name} -> {NOTEBOOK}")
     if args.uv:
         print("Environment: project uv")
     else:
@@ -262,11 +336,51 @@ def promote_static_resources(root: Path, temporary_html: Path) -> None:
     temporary_html.write_text(html, encoding="utf-8")
 
 
+def _split_notebook_lines(notebook: dict) -> dict:
+    """Normalize multiline notebook text before passing it to Quarto.
+
+    Jupyter's JSON writer stores cell sources and text MIME values as line
+    arrays. Quarto preserves paragraph boundaries more reliably with that
+    representation than with a single JSON string.
+    """
+
+    from copy import deepcopy
+
+    projected = deepcopy(notebook)
+
+    def split_mimebundle(data: object) -> None:
+        if not isinstance(data, dict):
+            return
+        for key, value in list(data.items()):
+            if isinstance(value, str) and (key.startswith("text/") or key in {"application/javascript", "image/svg+xml"}):
+                data[key] = value.splitlines(keepends=True)
+
+    for cell in projected.get("cells", []):
+        if not isinstance(cell, dict):
+            continue
+        source = cell.get("source")
+        if isinstance(source, str):
+            cell["source"] = source.splitlines(keepends=True)
+        for attachment in cell.get("attachments", {}).values():
+            split_mimebundle(attachment)
+        if cell.get("cell_type") != "code":
+            continue
+        for output in cell.get("outputs", []):
+            if not isinstance(output, dict):
+                continue
+            output_type = output.get("output_type")
+            if output_type in {"execute_result", "display_data"}:
+                split_mimebundle(output.get("data"))
+            elif output_type == "stream" and isinstance(output.get("text"), str):
+                output["text"] = output["text"].splitlines(keepends=True)
+    return projected
+
+
 def command_render(args: argparse.Namespace) -> int:
     root = project_root(args.root)
-    notebook = root / NOTEBOOK
-    if not notebook.is_file():
-        raise ReportError(f"missing executed notebook: {notebook}")
+    notebook, notebook_name = _input_path(root, args.notebook or NOTEBOOK, label="executed notebook")
+    if notebook.suffix.lower() != ".ipynb":
+        raise ReportError(f"executed notebook must be an .ipynb file: {notebook}")
     verify_quarto_config(root)
     quarto = locate_quarto(args.quarto)
     version = run_command([str(quarto), "--version"], cwd=root).stdout.strip()
@@ -282,7 +396,10 @@ def command_render(args: argparse.Namespace) -> int:
             shutil.rmtree(candidate)
 
     projection = root / "report.rendered.next.ipynb"
-    projection.write_text(json.dumps(quarto_notebook(json.loads(notebook.read_text()))), encoding="utf-8")
+    projection.write_text(
+        json.dumps(_split_notebook_lines(quarto_notebook(json.loads(notebook.read_text())))),
+        encoding="utf-8",
+    )
     try:
         run_command(
             [
@@ -307,9 +424,13 @@ def command_render(args: argparse.Namespace) -> int:
 
     promote_static_resources(root, temporary_html)
     os.replace(temporary_html, root / HTML)
-    inventory = build_inventory(root, quarto_version=version)
+    inventory = build_inventory(
+        root,
+        quarto_version=version,
+        notebook_path=notebook_name,
+    )
     (root / INVENTORY).write_text(json.dumps(inventory, indent=2) + "\n", encoding="utf-8")
-    print(f"Rendered {NOTEBOOK} -> {HTML}")
+    print(f"Rendered {notebook_name} -> {HTML}")
     print(f"Static resources: {STATIC}/ ({len(inventory['static']['files'])} files)")
     print(f"Inventory: {INVENTORY}")
     print(f"Status: {inventory['status']}")
@@ -333,16 +454,24 @@ def command_inspect(args: argparse.Namespace) -> int:
         problems.append(
             f"executed notebook contains {notebook['unexecuted_code_cells']} unexecuted code cells"
         )
-    for key, expected_name in (("source", SOURCE), ("notebook", NOTEBOOK), ("html", HTML)):
+    for key in ("source", "notebook", "html"):
+        expected_name = inventory[key]["path"]
         path = root / expected_name
         if not path.is_file():
             problems.append(f"missing {expected_name}")
         elif sha256(path) != inventory[key]["sha256"]:
             problems.append(f"{expected_name} changed after inventory")
     execution = inventory["notebook"].get("execution", {})
-    source_path = root / SOURCE
-    if source_path.is_file() and execution.get("source_sha256") != sha256(source_path):
+    source_path = root / inventory["source"]["path"]
+    if (
+        source_path.is_file()
+        and execution.get("source_sha256")
+        and inventory["source"].get("freshness") != "unknown"
+        and execution.get("source_sha256") != sha256(source_path)
+    ):
         problems.append("executed notebook is stale relative to report.py")
+    if inventory["source"].get("freshness") == "unknown":
+        problems.append("source freshness is unknown; render used saved notebook outputs")
 
     recorded_static = {item["path"]: item["sha256"] for item in inventory["static"]["files"]}
     current_static = {item["path"]: item["sha256"] for item in static_inventory(root)}
@@ -383,7 +512,7 @@ def parser() -> argparse.ArgumentParser:
     new.add_argument("root", nargs="?", default=".")
     new.set_defaults(handler=command_new)
 
-    run = subcommands.add_parser("run", help="execute report.py into report.executed.ipynb")
+    run = subcommands.add_parser("run", help="execute a report source into report.executed.ipynb")
     run.add_argument("root", nargs="?", default=".")
     environment = run.add_mutually_exclusive_group(required=True)
     environment.add_argument("--python", help="explicit Python interpreter path")
@@ -394,11 +523,21 @@ def parser() -> argparse.ArgumentParser:
         default=600,
         help="per-cell execution timeout in seconds",
     )
+    run.add_argument(
+        "--source",
+        metavar="PATH",
+        help="source file inside the report project (Python/Jupytext or native .ipynb); defaults to report.py",
+    )
     run.set_defaults(handler=command_run)
 
     render = subcommands.add_parser("render", help="render saved notebook outputs with Quarto")
     render.add_argument("root", nargs="?", default=".")
     render.add_argument("--quarto", help="explicit Quarto executable path")
+    render.add_argument(
+        "--notebook",
+        metavar="PATH",
+        help="saved .ipynb input inside the report project; defaults to report.executed.ipynb",
+    )
     render.set_defaults(handler=command_render)
 
     inspect = subcommands.add_parser("inspect", help="inspect this system's generated report artifacts")
