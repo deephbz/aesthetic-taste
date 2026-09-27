@@ -20,6 +20,14 @@ classifiers = [
 ]
 dependencies = []
 
+[project.optional-dependencies]
+notebook = [
+  "jupyter-kernel-client>=1.0.2,<2",
+  "jupyter-nbmodel-client>=1.5.1,<2",
+  "jupytext>=1.19.5,<2",
+  "requests>=2.32,<3",
+]
+
 [project.urls]
 Repository = "https://github.com/deephbz/aesthetic-taste"
 

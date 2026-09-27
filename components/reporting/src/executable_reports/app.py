@@ -9,6 +9,7 @@ import sys
 from typing import Sequence
 
 from . import cli
+from . import notebook
 from .artifacts import VERIFY_RECEIPT, VERIFY_SCREENSHOT
 from .inventory import sha256
 from .verification import verify_report
@@ -127,6 +128,7 @@ def parser() -> argparse.ArgumentParser:
         help="maximum browser setup and page-load time (default: 15)",
     )
     verify.set_defaults(handler=command_verify)
+    notebook.add_parser(_subcommands(result))
     return result
 
 
@@ -134,7 +136,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
         return int(args.handler(args))
-    except cli.ReportError as error:
+    except (cli.ReportError, notebook.NotebookError) as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 1
 

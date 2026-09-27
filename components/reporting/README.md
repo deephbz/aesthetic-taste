@@ -13,3 +13,13 @@ The [report contract](../../docs/report-contract.md),
 [CLI design](../../docs/report-cli-design.md), and
 [presentation guide](../../.agents/skills/report-presentation/SKILL.md) own the relevant design
 boundaries. Source is in `src/executable_reports/`; tests are in `tests/`.
+
+The optional `notebook` extra installs the agent-side live notebook clients,
+Jupytext, and HTTP transport used by `report notebook`:
+
+```sh
+uv sync --project components/reporting --extra notebook
+```
+
+The extra does not install JupyterLab. Install the host and its renderer from
+the [notebook environment guide](../../environments/README.md).
