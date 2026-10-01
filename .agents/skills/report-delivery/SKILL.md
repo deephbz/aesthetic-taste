@@ -1,12 +1,13 @@
 ---
 name: report-delivery
-description: Build and check saved report outputs, or inspect and diagnose an existing report without rerunning analysis. Use for the report CLI, HTTP serving, browser receipts, and host verification.
+description: Build, verify, and serve saved report outputs. Use for the report CLI build sequence, HTTP serving, browser verification receipts, and host checks.
 ---
 
 # Report delivery
 
-Own producing and checking saved report outputs, static serving practice, and
-receipt-driven diagnosis. Live kernel work belongs to
+Own producing and verifying saved report outputs and static serving practice.
+Reading, inspecting, or diagnosing an existing report belongs to
+[report-reading](../report-reading/SKILL.md). Live kernel work belongs to
 [report-authoring](../report-authoring/SKILL.md) and the
 [notebook collaboration guide](../../../docs/notebook-collaboration.md).
 Deployment infrastructure remains outside this workflow.
@@ -39,22 +40,10 @@ The `report` command below refers to that component.
    as described in the CLI reference. Pass a native notebook with
    `report run --source`; preserve the same source-hash and promotion
    guarantees.
-4. Read the inspection and verification results. Investigate failed checks using
-   the procedure below, and check the requested hosts and outputs.
-
-## Check an existing report
-
-1. Start with `report inspect ROOT` to check saved artifacts and drift without
-   rerunning the analysis. Preserve the existing failure evidence while diagnosing.
-2. Read an existing `report.verify.json` when investigating its reported failure.
-   Run `report verify ROOT` when current browser evidence is needed.
-3. Use the diagnostics below to isolate failures. Rebuild when source changes or
-   stale artifacts require it; verification can run independently of a build.
-
-When the input is a live notebook, `report notebook status` and `read` establish
-the current server, kernel, cell source, and output state before export. A saved
-notebook output may require notebook trust for browser execution in JupyterLab;
-the static HTML check still needs its own HTTP and browser verification.
+4. Read the inspection and verification results. Investigate failed checks with
+   [report-reading](../report-reading/SKILL.md#investigate-browser-failures), and
+   check the requested hosts and outputs.
+5. Run `report agent-view` and check which outputs lack a compact form.
 
 ## Verify hosts and outputs
 
@@ -72,18 +61,6 @@ Serve the report root through HTTP. Do not open fetch-based reports with a
 `file:` URL. Enable Brotli compression and keep gzip as fallback. Prefer HTTP/2
 or HTTP/3 when the host supports it. Use system fonts to avoid webfont requests.
 Set long immutable cache headers only for content-hashed resources.
-
-## Investigate browser failures
-
-Start from `report.verify.json`, not from a new browser harness. Read the first
-problem and run its `diagnostics.quick_start` call from the report root. Use the
-problem selector, when present, for a targeted screenshot and DOM/layout extraction; add a
-trace only when the generic receipt is insufficient.
-
-For library-specific inspection, use `browser_session()` and query the
-renderer-owned public API, such as a Bokeh model, Perspective saved state, or AG
-Grid API. Keep semantic acceptance checks in `window.__REPORT_VERIFY__` rather
-than coupling the generic verifier to private renderer internals.
 
 ## Completion
 

@@ -92,7 +92,10 @@ prototype.
     visual emphasis, and architecture using Great Tables or pandas Styler.
     Shaping.
   - [Report delivery](.agents/skills/report-delivery/SKILL.md) — build saved outputs,
-    inspect and verify them, serve over HTTP, and diagnose failures.
+    verify them, and serve over HTTP.
+  - [Report reading](.agents/skills/report-reading/SKILL.md) — the compact agent
+    view of an executed report, artifact inspection, and failure diagnosis.
+    Exploration.
   - [Report model](docs/report-model.md) — shared vocabulary, design forces,
     and the analysis stack. Shaping.
 - **Notebook environments**

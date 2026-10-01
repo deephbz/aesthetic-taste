@@ -1,6 +1,6 @@
 ---
 name: ask-aesthetic-taste
-description: Choose the repository skill or flow for report authoring, reusable analysis components, dataframe pipelines, presentation, tables, or saved report delivery.
+description: Choose the repository skill or flow for report authoring, reusable analysis components, dataframe pipelines, presentation, tables, report reading, or saved report delivery.
 ---
 
 # Ask Aesthetic Taste
@@ -22,8 +22,9 @@ remain separate areas in the [repository map](../../../README.md#repository-map)
 - Change reading navigation, Mermaid, or notebook/HTML display integration:
   use [report-presentation](../report-presentation/SKILL.md).
 - Design or review a table: use [table-presentation](../table-presentation/SKILL.md).
-- Produce saved outputs, check an existing bundle, or diagnose a browser failure:
-  use [report-delivery](../report-delivery/SKILL.md).
+- Read what an existing report found, inspect its artifacts, or diagnose a
+  recorded failure: use [report-reading](../report-reading/SKILL.md).
+- Build, verify, or serve saved outputs: use [report-delivery](../report-delivery/SKILL.md).
 
 ## Compose only what the task needs
 
@@ -34,12 +35,13 @@ flowchart TD
   A -->|Display integration| P[Report presentation]
   P -->|Table design| T[Table presentation]
   A -->|Saved outputs| D[Report delivery]
+  D -->|Read or diagnose| R[Report reading]
 ```
 
 Each node is also a direct entry point. These links are conditional, not required
 stages. Component design, dataframe pipelines, and table design can be used without
 building a report.
-Delivery supports both a new build and verification of an existing artifact.
+Reading an existing report needs no build.
 
 ## Shared references
 
