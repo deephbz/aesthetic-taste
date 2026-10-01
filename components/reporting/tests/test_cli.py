@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest import mock
 
 from executable_reports.artifacts import HTML, INVENTORY, NOTEBOOK, QUARTO_CONFIG, SOURCE, STATIC
-from executable_reports.cli import locate_quarto, main, promote_static_resources
+from executable_reports.cli import ReportError, _promote_cell_ids, locate_quarto, main, promote_static_resources
 from executable_reports.inventory import build_inventory, sha256
 
 
@@ -72,6 +72,21 @@ class ReportCliTests(unittest.TestCase):
             self.assertEqual(result, 1)
             self.assertIn("requires an empty project root", stderr.getvalue())
             self.assertEqual((root / "unrelated.txt").read_text(), "keep")
+
+    def test_marked_jupytext_cells_keep_their_ids(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "input.ipynb"
+            cells = [{"cell_type": "code", "id": "f3a9", "metadata": {"id": "outcomes"}, "source": ""},
+                     {"cell_type": "markdown", "id": "77b0", "metadata": {}, "source": ""}]
+            path.write_text(json.dumps({"cells": cells}), encoding="utf-8")
+            _promote_cell_ids(path)
+            promoted = json.loads(path.read_text())["cells"]
+            self.assertEqual([cell["id"] for cell in promoted], ["outcomes", "77b0"])
+            self.assertNotIn("id", promoted[0]["metadata"])
+            cells[1]["metadata"]["id"] = "outcomes"
+            path.write_text(json.dumps({"cells": cells}), encoding="utf-8")
+            with self.assertRaises(ReportError):
+                _promote_cell_ids(path)
 
     def test_inventory_links_source_notebook_and_html(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

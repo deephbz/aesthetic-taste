@@ -15,13 +15,14 @@ artifacts. The `report notebook` command group also provides the small live
 document surface needed for human-agent notebook collaboration. It does not
 manage durable browser sessions, data stores, or deployment infrastructure.
 
-The saved-report surface has five verbs:
+The saved-report surface has six verbs:
 
 ```text
 report new ROOT
 report run ROOT (--uv | --python PATH) [--source PATH]
 report render ROOT [--quarto PATH] [--notebook PATH]
 report inspect ROOT [--render [PATH]]
+report agent-view ROOT [--notebook PATH] [--code] [--limit CHARS]
 report verify ROOT [--browser PATH] [--timeout SECONDS]
 report notebook --server-json PATH [--notebook PATH] {status,read,edit,insert,move,delete,execute,eval,export} ...
 ```
@@ -30,8 +31,9 @@ report notebook --server-json PATH [--notebook PATH] {status,read,edit,insert,mo
 observation boundary directly:
 
 ```text
-inspect  what did we build?  saved artifacts and parsed HTML
-verify   does it work?       one real Chromium execution
+inspect     what did we build?  saved artifacts and parsed HTML
+agent-view  what does it say?   prose and compact output forms, by cell ID
+verify      does it work?       one real Chromium execution
 ```
 
 `report notebook` owns live notebook operations. Its detailed options and
@@ -81,7 +83,9 @@ temporary notebooks, records source and interpreter identity, then promotes
 the result only when the source hash is unchanged. `--source` selects a
 Jupytext source or a native `.ipynb` inside the report root; it defaults to
 `report.py`. `--uv` uses the report project environment. `--python` uses one
-explicit interpreter.
+explicit interpreter. A Jupytext cell marked `# %% id="name"` keeps `name` as
+its native cell ID; `run` rejects a duplicate or invalid ID. Unmarked cells get
+a fresh ID on each conversion.
 
 `render` calls Quarto with `--no-execute`. It preserves the executed notebook
 hash, moves sidecars to `report.static/`, and records hashes, output MIME data,
@@ -98,6 +102,11 @@ output; the static HTML bundle still requires its own HTTP and browser check.
 default authority for agents. `--render` derives a human HTML view from the
 same inspection record. Byte counts, element counts, and execution counts stay
 separate. Parsed elements are structure proxies, not browser runtime evidence.
+
+`agent-view` prints the agent view of the saved notebook: markdown prose whole,
+then each output's `text/plain` (else `text/markdown`) form under its stable
+cell ID, cut at `--limit` characters. An output with only rich forms prints a
+`no compact form` stub. It reads no HTML and runs nothing.
 
 ## Browser verification
 

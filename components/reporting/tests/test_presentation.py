@@ -1,7 +1,7 @@
 """Protect the export boundary between execution evidence and host syntax."""
 import copy
 import unittest
-from executable_reports.presentation import quarto_notebook
+from executable_reports.presentation import Mermaid, quarto_notebook
 
 class PresentationTests(unittest.TestCase):
     def test_export_projects_only_mermaid_and_preserves_execution_evidence(self):
@@ -18,3 +18,12 @@ class PresentationTests(unittest.TestCase):
         self.assertTrue(data['text/markdown'].startswith('````{mermaid}\nflowchart LR\n'))
         self.assertIn('A["```"] --> B', data['text/markdown'])
         self.assertTrue(data['text/markdown'].endswith('\n````'))
+
+    def test_mermaid_compact_form_drops_styling_and_prefers_a_supplied_summary(self):
+        source = 'flowchart TB\naccTitle: T\n  a["read<br/>x #61; 1"]:::file --> b\n  classDef file fill:#fff'
+        plain = Mermaid(source)._repr_mimebundle_()["text/plain"]
+        self.assertEqual(plain, 'flowchart TB\n  a["read · x = 1"] --> b')
+        class Summarized(str):
+            compact = "2 steps"
+        self.assertEqual(Mermaid(Summarized(source))._repr_mimebundle_()["text/plain"], "2 steps")
+        self.assertEqual(Mermaid(source, text="own")._repr_mimebundle_(), {"text/vnd.mermaid": source, "text/plain": "own"})

@@ -14,6 +14,7 @@ import tempfile
 from pathlib import Path
 from typing import Sequence
 
+from .agent_view import DEFAULT_LIMIT, agent_view
 from .presentation import quarto_notebook, reading_frontmatter, reading_navigation
 from .artifacts import HTML, INVENTORY, NOTEBOOK, QUARTO_CONFIG, SOURCE, STATIC
 from .inspection import (
@@ -92,6 +93,28 @@ def run_command(
 def normalized_project_name(root: Path) -> str:
     name = re.sub(r"[^a-z0-9]+", "-", root.name.lower()).strip("-")
     return name or "executable-report"
+
+
+CELL_ID = re.compile(r"[A-Za-z0-9_-]{1,64}")
+
+
+def _promote_cell_ids(path: Path) -> None:
+    """Make ``# %% id="name"`` the native cell ID, so evidence citations stay stable.
+
+    Jupytext keeps the marker as cell metadata and assigns a fresh native ID on
+    every conversion. Cells without the marker keep that fresh ID.
+    """
+    notebook = json.loads(path.read_text(encoding="utf-8"))
+    seen: set[str] = set()
+    for cell in notebook.get("cells", []):
+        wanted = cell.get("metadata", {}).pop("id", None)
+        if wanted is None:
+            continue
+        if not isinstance(wanted, str) or not CELL_ID.fullmatch(wanted) or wanted in seen:
+            raise ReportError(f"cell id {wanted!r} must be unique and match {CELL_ID.pattern}")
+        seen.add(wanted)
+        cell["id"] = wanted
+    path.write_text(json.dumps(notebook, indent=1) + "\n", encoding="utf-8")
 
 
 def command_new(args: argparse.Namespace) -> int:
@@ -215,6 +238,7 @@ def command_run(args: argparse.Namespace) -> int:
                 ],
                 cwd=root,
             )
+            _promote_cell_ids(temporary_input)
         run_command(
             [
                 *prefix,
@@ -504,6 +528,16 @@ def command_inspect(args: argparse.Namespace) -> int:
     return 1 if problems else 0
 
 
+def command_agent_view(args: argparse.Namespace) -> int:
+    root = project_root(args.root)
+    notebook, _ = _input_path(root, args.notebook or NOTEBOOK, label="executed notebook")
+    if notebook.suffix.lower() != ".ipynb":
+        raise ReportError(f"executed notebook must be an .ipynb file: {notebook}")
+    sys.stdout.write(agent_view(json.loads(notebook.read_text(encoding="utf-8")),
+                                code=args.code, limit=args.limit))
+    return 0
+
+
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(prog="report", description="Executable report vertical slice")
     subcommands = result.add_subparsers(dest="command", required=True)
@@ -551,6 +585,19 @@ def parser() -> argparse.ArgumentParser:
     )
     inspect.add_argument("--json", action="store_true", help=argparse.SUPPRESS)
     inspect.set_defaults(handler=command_inspect)
+
+    view = subcommands.add_parser(
+        "agent-view", help="print the compact agent view of saved notebook outputs")
+    view.add_argument("root", nargs="?", default=".")
+    view.add_argument(
+        "--notebook",
+        metavar="PATH",
+        help="saved .ipynb input inside the report project; defaults to report.executed.ipynb",
+    )
+    view.add_argument("--code", action="store_true", help="include code cell sources")
+    view.add_argument("--limit", type=int, default=DEFAULT_LIMIT, metavar="CHARS",
+                      help=f"characters per output (default: {DEFAULT_LIMIT})")
+    view.set_defaults(handler=command_agent_view)
     return result
 
 

@@ -24,17 +24,35 @@ class Mermaid:
     No frontend rendering is needed before export. report render projects the
     native MIME output into Quarto Mermaid cells. See the presentation
     guide for export format and normal notebook trust requirements.
+
+    ``text`` is the compact form for agents and plain hosts. Without it, a
+    source that carries a ``compact`` attribute supplies it; otherwise the
+    compact form is the source without styling lines and label markup.
     """
 
-    def __init__(self, source: str):
+    def __init__(self, source: str, *, text: str | None = None):
         if not isinstance(source, str) or not source.strip():
             raise ValueError("Mermaid source must be nonempty text")
-        self.source = source
+        self.source = str(source)
+        self.text = text or getattr(source, "compact", None) or _mermaid_text(self.source)
 
     def _repr_mimebundle_(self, include=None, exclude=None):
-        bundle = {"text/vnd.mermaid": self.source, "text/plain": self.source}
+        bundle = {"text/vnd.mermaid": self.source, "text/plain": self.text}
         return {key: value for key, value in bundle.items()
                 if (include is None or key in include) and (exclude is None or key not in exclude)}
+
+
+_STYLING = ("classDef ", "class ", "style ", "linkStyle ", "accTitle", "accDescr", "%%")
+
+
+def _mermaid_text(source: str) -> str:
+    """Drop lines that only style the graph and decode label markup."""
+    import html
+    import re
+    kept = [line for line in source.splitlines() if not line.strip().startswith(_STYLING)]
+    text = "\n".join(kept).replace("<br/>", " · ").replace("<br>", " · ")
+    text = re.sub(r":::[\w-]+", "", text)
+    return html.unescape(re.sub(r"#(\d+);", r"&#\1;", text))
 
 
 def quarto_notebook(notebook: dict) -> dict:
