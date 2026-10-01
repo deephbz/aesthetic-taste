@@ -271,10 +271,16 @@ class _ReportHandler(SimpleHTTPRequestHandler):
         return
 
 
+class _ReportServer(ThreadingHTTPServer):
+    # A Quarto page requests many assets at once; the default backlog of 5
+    # resets some connections, and missing assets then fail later checks.
+    request_queue_size = 128
+
+
 @contextlib.contextmanager
 def serve_report(root: str | Path) -> Iterator[str]:
     handler = partial(_ReportHandler, directory=str(Path(root).expanduser().resolve()))
-    server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    server = _ReportServer(("127.0.0.1", 0), handler)
     server.daemon_threads = True
     thread = threading.Thread(
         target=lambda: server.serve_forever(poll_interval=0.01), daemon=True
