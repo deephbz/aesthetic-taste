@@ -27,7 +27,10 @@ The `report` command below refers to that component.
 ## Produce a report
 
 1. For a new report, use `report new ROOT` in a missing or empty directory.
-   Use the authoring skill to create or revise its analysis.
+   For an existing study, use `report new ROOT --adopt`. It adds only the
+   missing inputs and keeps every existing file, including `pyproject.toml`;
+   add the report dependencies to a kept project yourself. Use the authoring
+   skill to create or revise its analysis.
 2. If the report was authored in a live notebook, review the live source and
    outputs, then use `report notebook export` to create the one-way Jupytext
    projection. Treat that export as the source snapshot for the clean build.

@@ -18,7 +18,7 @@ manage durable browser sessions, data stores, or deployment infrastructure.
 The saved-report surface has six verbs:
 
 ```text
-report new ROOT
+report new ROOT [--adopt]
 report run ROOT (--uv | --python PATH) [--source PATH]
 report render ROOT [--quarto PATH] [--notebook PATH]
 report inspect ROOT [--render [PATH]]
@@ -71,7 +71,8 @@ report.verify.json         latest real-browser verification receipt
 report.verify.png          latest initial-viewport browser evidence
 ```
 
-`new` accepts only a missing or empty root. It seeds the reading profile from
+`new` accepts only a missing or empty root. `--adopt` adds the missing inputs
+to an existing study and keeps every existing file. It seeds the reading profile from
 `executable_reports.presentation`: format settings live in the notebook's raw
 frontmatter, and `reading-navigation.html` is a report-owned source snapshot.
 The defaults include contents, section highlighting, and scroll progress.

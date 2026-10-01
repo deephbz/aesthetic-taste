@@ -123,10 +123,11 @@ def command_new(args: argparse.Namespace) -> int:
         raise ReportError(f"report project root is not a directory: {root}")
     if root.is_dir():
         existing = sorted(path.name for path in root.iterdir())
-        if existing:
+        if existing and not args.adopt:
             names = ", ".join(existing[:5])
             suffix = ", ..." if len(existing) > 5 else ""
-            raise ReportError(f"report new requires an empty project root; found: {names}{suffix}")
+            raise ReportError(f"report new requires an empty project root; found: {names}{suffix}. "
+                              "Use --adopt to add only the missing report inputs to an existing study.")
     else:
         root.mkdir(parents=True)
     files = {
@@ -135,10 +136,12 @@ def command_new(args: argparse.Namespace) -> int:
         root / QUARTO_CONFIG: QUARTO_SOURCE,
         root / "reading-navigation.html": reading_navigation(),
     }
+    print(f"{'Adopted' if args.adopt else 'Created'} report project: {root}")
     for path, content in files.items():
+        if path.exists():
+            print(f"  kept   {path.name}")
+            continue
         path.write_text(content, encoding="utf-8")
-    print(f"Created report project: {root}")
-    for path in files:
         print(f"  input  {path.name}")
     return 0
 
@@ -544,6 +547,8 @@ def parser() -> argparse.ArgumentParser:
 
     new = subcommands.add_parser("new", help="create a flat report project")
     new.add_argument("root", nargs="?", default=".")
+    new.add_argument("--adopt", action="store_true",
+                     help="add missing report inputs to an existing study; never overwrite a file")
     new.set_defaults(handler=command_new)
 
     run = subcommands.add_parser("run", help="execute a report source into report.executed.ipynb")

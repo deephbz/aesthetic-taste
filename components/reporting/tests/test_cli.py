@@ -73,6 +73,17 @@ class ReportCliTests(unittest.TestCase):
             self.assertIn("requires an empty project root", stderr.getvalue())
             self.assertEqual((root / "unrelated.txt").read_text(), "keep")
 
+    def test_new_adopt_adds_missing_inputs_and_keeps_existing_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "pyproject.toml").write_text("study", encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()) as stdout:
+                result = main(["new", str(root), "--adopt"])
+            self.assertEqual(result, 0)
+            self.assertEqual((root / "pyproject.toml").read_text(), "study")
+            self.assertTrue((root / SOURCE).is_file())
+            self.assertIn("kept   pyproject.toml", stdout.getvalue())
+
     def test_marked_jupytext_cells_keep_their_ids(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "input.ipynb"
