@@ -79,6 +79,9 @@ prototype.
   - [Report authoring](.agents/skills/report-authoring/SKILL.md) — global setup, sections,
     source binding, wiring, display, and live editing. Structure shaping; live
     notebook workflow consolidation.
+  - [Report writing](.agents/skills/report-writing/SKILL.md) — the prose a
+    reader sees: why it matters, the answer, numbers with meaning, and
+    producer details kept in the appendix. Shaping.
   - [Live notebook collaboration](docs/notebook-collaboration.md) — the shared
     JupyterLab document, selected-cell execution, scratch kernels, trust, and
     the one-way Jupytext export.

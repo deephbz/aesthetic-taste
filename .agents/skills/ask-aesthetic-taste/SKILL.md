@@ -1,6 +1,6 @@
 ---
 name: ask-aesthetic-taste
-description: Choose the repository skill or flow for report authoring, reusable analysis components, dataframe pipelines, presentation, tables, report reading, or saved report delivery.
+description: Choose the repository skill or flow for report authoring, report writing, reusable analysis components, dataframe pipelines, presentation, tables, report reading, or saved report delivery.
 ---
 
 # Ask Aesthetic Taste
@@ -19,6 +19,8 @@ remain separate areas in the [repository map](../../../README.md#repository-map)
   output, and configuration contract: use [analysis-components](../analysis-components/SKILL.md).
 - Design or review meaning, validation scope, or named computations inside a
   dataframe-centric component: use [dataframe-pipelines](../dataframe-pipelines/SKILL.md).
+- Write or review the prose a report's reader sees: title, opening, headings,
+  result statements, and limits: use [report-writing](../report-writing/SKILL.md).
 - Change reading navigation, Mermaid, or notebook/HTML display integration:
   use [report-presentation](../report-presentation/SKILL.md).
 - Design or review a table: use [table-presentation](../table-presentation/SKILL.md).
@@ -30,7 +32,8 @@ remain separate areas in the [repository map](../../../README.md#repository-map)
 
 ```mermaid
 flowchart TD
-  A[Report authoring] -->|Reusable analysis| C[Analysis components]
+  A[Report authoring] -->|Reader-facing prose| W[Report writing]
+  A -->|Reusable analysis| C[Analysis components]
   C -->|Dataframe-centric component| F[Dataframe pipelines]
   A -->|Display integration| P[Report presentation]
   P -->|Table design| T[Table presentation]

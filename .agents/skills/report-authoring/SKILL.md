@@ -29,6 +29,8 @@ for data authority, state, host parity, and durability constraints.
   use [report-presentation](../report-presentation/SKILL.md).
 - When creating or revising a table's structure, formats, or emphasis, use
   [table-presentation](../table-presentation/SKILL.md).
+- When writing the prose a reader sees, use
+  [report-writing](../report-writing/SKILL.md).
 - When creating a new report root or producing saved outputs, use
   [report-delivery](../report-delivery/SKILL.md).
 
