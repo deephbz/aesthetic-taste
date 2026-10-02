@@ -88,6 +88,8 @@ Environment-specific
   to find. Current-section indicators must follow scrolling and layout changes.
   Page navigation is a host-specific concern; analytical views keep the same
   meaning across notebook and HTML hosts.
+- **Diagram inspection.** A reader can expand any diagram to fill the browser
+  window in the HTML host and return to the same reading position.
 - **Supported hosts.** Verify rendered output in JupyterLab/notebooks and in
   an HTML bundle served by an HTTP server. Analytical meaning must agree in
   both hosts; navigation and other host controls can differ.

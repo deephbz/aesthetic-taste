@@ -19,12 +19,69 @@
 }
 
 #TOC > ul.collapse { display: block; }
+/* Diagram toggle: expand a rendered Mermaid diagram or [data-report-expand]
+   figure to fill the browser window; the screen and browser chrome stay as they are. */
+.report-expandable { position: relative; }
+.report-expand {
+  position: absolute; top: 4px; right: 4px; z-index: 2; padding: 2px 8px;
+  font: 12px/1.6 system-ui, sans-serif; color: var(--teal, #087f78);
+  background: #fff; border: 1px solid var(--teal-soft, #b8ddd6); border-radius: 4px;
+  cursor: pointer; opacity: .55;
+}
+.report-expandable:hover > .report-expand, .report-expand:focus-visible { opacity: 1; }
+.report-expandable.report-expanded {
+  position: fixed; inset: 0; z-index: 10001; margin: 0; max-width: none;
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 32px 32px; background: #fff; overflow: auto;
+}
+.report-expandable.report-expanded svg {
+  width: 100% !important; height: 100% !important; max-width: none !important; max-height: none !important;
+}
+.report-expandable.report-expanded > .report-expand { position: fixed; top: 12px; right: 12px; opacity: 1; }
+html.report-expanded-open { overflow: hidden; }
 </style>
 <!-- Report reading navigation, included into the HTML bundle by Quarto. -->
 <div id="reading-progress" role="progressbar" aria-label="Page scroll progress"
      aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
 <script>
 (() => {
+  // Diagram toggle: the expanded diagram fills the browser window, not the screen.
+  function close() {
+    const open = document.querySelector('.report-expanded');
+    if (!open) return;
+    open.classList.remove('report-expanded');
+    document.documentElement.classList.remove('report-expanded-open');
+    const button = open.querySelector(':scope > .report-expand');
+    button.textContent = 'Expand'; button.setAttribute('aria-expanded', 'false'); button.focus({preventScroll: true});
+  }
+  function toggle(box, button) {
+    const wasOpen = box.classList.contains('report-expanded');
+    close();
+    if (wasOpen) return;
+    box.classList.add('report-expanded');
+    document.documentElement.classList.add('report-expanded-open');
+    button.textContent = 'Close'; button.setAttribute('aria-expanded', 'true'); button.focus({preventScroll: true});
+  }
+  function enhance(box) {
+    if (box.querySelector(':scope > .report-expand')) return;
+    box.classList.add('report-expandable');
+    const button = document.createElement('button');
+    button.type = 'button'; button.className = 'report-expand'; button.textContent = 'Expand';
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-label', 'Expand this diagram to the browser window');
+    button.addEventListener('click', () => toggle(box, button));
+    box.prepend(button);
+  }
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
+  // Quarto replaces each Mermaid block with svg.mermaid-js; other hosts keep a
+  // pre.mermaid around the SVG. Mermaid reads the block's text before it renders,
+  // so enhance a block only once its SVG exists.
+  function enhanceAll() {
+    const boxes = new Set(document.querySelectorAll('[data-report-expand]'));
+    document.querySelectorAll('svg.mermaid-js').forEach(svg => boxes.add(svg.parentElement));
+    document.querySelectorAll('pre.mermaid, div.mermaid').forEach(box => { if (box.querySelector('svg')) boxes.add(box); });
+    boxes.forEach(enhance);
+  }
   function start() {
     const bar = document.getElementById('reading-progress');
     const links = [...document.querySelectorAll('#TOC a.nav-link')];
@@ -63,6 +120,8 @@
     new ResizeObserver(schedule).observe(document.body);
     document.fonts.ready.then(schedule);
     update();
+    enhanceAll();
+    new MutationObserver(enhanceAll).observe(document.body, {childList: true, subtree: true});
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, {once:true});
   else start();

@@ -171,6 +171,20 @@ class VerificationReceiptTests(unittest.TestCase):
         self.assertEqual(receipt["status"], "failed")
         self.assertEqual(receipt["problems"][0]["id"], "views.canvas-zero-bitmap.1")
 
+    def test_diagram_without_toggle_warns_and_broken_toggle_fails(self) -> None:
+        # Older reports carry an older navigation snapshot: warn. A toggle that
+        # takes the screen or loses the reading position is broken: fail.
+        probe = self.base_probe()
+        probe["diagrams"] = [
+            {"index": 0, "toggle": False},
+            {"index": 1, "toggle": True, "fills_window": True, "closed": True,
+             "scroll_restored": True, "expanded": {"screen_fullscreen": True}},
+        ]
+        receipt = self.build(probe=probe)
+        self.assertEqual(receipt["status"], "failed")
+        self.assertEqual([(p["id"], p["severity"]) for p in receipt["problems"]],
+                         [("diagrams.no-toggle.1", "warning"), ("diagrams.toggle-failed.2", "error")])
+
 
 class StaticReportServerTests(unittest.TestCase):
     def test_loopback_server_serves_report_and_browser_mime_types(self) -> None:
@@ -302,6 +316,24 @@ window.__REPORT_VERIFY__ = async () => ({
             self.assertEqual(receipt["summary"]["views_observed"], 1)
             self.assertTrue(receipt["report_hook"]["present"])
             self.assertTrue(screenshot.is_file())
+
+    def test_diagram_toggle_expands_to_the_browser_window(self) -> None:
+        from executable_reports.presentation import reading_navigation
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / HTML).write_text(
+                "<!doctype html><html><head><meta charset='utf-8'><title>Diagram</title></head><body>"
+                "<main><p style='height:1500px'>text</p><figure><div>"
+                "<svg class='mermaid-js' viewBox='0 0 200 100' style='max-width:200px'>"
+                "<rect width='200' height='100'/></svg></div></figure></main>"
+                + reading_navigation() + "</body></html>",
+                encoding="utf-8",
+            )
+            receipt = verify_report(root, browser_path=os.environ["REPORT_BROWSER_PATH"], timeout_seconds=10)
+            self.assertEqual(receipt["status"], "passed", receipt["problems"])
+            [diagram] = receipt["diagrams"]
+            self.assertTrue(diagram["fills_window"] and diagram["closed"] and diagram["scroll_restored"])
+            self.assertFalse(diagram["expanded"]["screen_fullscreen"])
 
 
 if __name__ == "__main__":

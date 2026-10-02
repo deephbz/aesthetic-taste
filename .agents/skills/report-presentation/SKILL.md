@@ -32,6 +32,15 @@ The script measures the current page, so opening code panels or rendering a
 diagram does not leave the progress calculation stale. It does not read data
 or change analytical state. Notebook navigation remains JupyterLab's concern.
 
+The same fragment gives each rendered Mermaid diagram an "Expand" button. The
+diagram then fills the browser window and scales to it; the screen and the
+browser's own controls do not change. The page stops scrolling underneath.
+Escape or "Close" returns to the same reading position. Mark any other figure
+with `data-report-expand` to give it the same button. The button appears only
+after Mermaid has rendered, because Mermaid reads the block's text.
+`report verify` checks every diagram's toggle; a report with an older fragment
+gets a warning to copy the current one.
+
 `report new` copies the reading profile into `report.py` and writes an editable
 navigation fragment. Those files then belong to that report's versioned source
 bundle. Updating the package does not silently change an existing report.

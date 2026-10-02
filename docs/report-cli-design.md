@@ -121,6 +121,9 @@ context. It performs bounded, high-signal checks:
 - visible Canvas drawing-buffer size and SVG viewBox sanity;
 - detected Perspective, AG Grid, Bokeh, Plotly, Vega, Canvas, custom-element,
   and `[data-report-view]` roots;
+- each rendered diagram's expand toggle: it fills the browser window without
+  screen full screen, closes with Escape, and keeps the reading position. This
+  check runs after the screenshot because it clicks;
 - optional report-owned checks from `window.__REPORT_VERIFY__`.
 
 The local server supports static-resource MIME types and single HTTP byte-range
@@ -130,7 +133,9 @@ initial viewport. The command does not claim automated visual taste judgment;
 agents should read the screenshot when pixels matter.
 
 Warnings remain visible in the receipt but do not fail the command. Runtime,
-resource, navigation, declared-view, and report-owned errors return exit code 1.
+resource, navigation, declared-view, diagram-toggle, and report-owned errors
+return exit code 1. A diagram without a toggle is a warning, because an older
+report keeps its own copy of the navigation fragment.
 The command always attempts to write a bounded JSON receipt, including setup
 failures such as a missing Playwright package or browser executable.
 Verification receipts and screenshots are diagnostic evidence, not publication

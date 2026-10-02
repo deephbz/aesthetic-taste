@@ -594,6 +594,50 @@ limit => Array.from(document.querySelectorAll("*"))
 """
 
 
+_DIAGRAM_PROBE = r"""
+async () => {
+  // Each rendered diagram must expand to the browser window and close with Escape.
+  const frame = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  const boxes = new Set(document.querySelectorAll("[data-report-expand]"));
+  document.querySelectorAll("svg.mermaid-js").forEach(svg => boxes.add(svg.parentElement));
+  document.querySelectorAll("pre.mermaid, div.mermaid").forEach(box => {
+    if (box.querySelector("svg")) boxes.add(box);
+  });
+  const results = [];
+  for (const [index, box] of [...boxes].slice(0, 20).entries()) {
+    const button = box.querySelector(":scope > .report-expand");
+    const item = {index, toggle: Boolean(button)};
+    if (button) {
+      const scroll = window.scrollY;
+      button.click();
+      await frame();
+      const rect = box.getBoundingClientRect();
+      const root = document.documentElement;
+      item.expanded = {
+        width: Math.round(rect.width), height: Math.round(rect.height),
+        x: Math.round(rect.x), y: Math.round(rect.y),
+        window: {width: root.clientWidth, height: root.clientHeight},
+        screen_fullscreen: Boolean(document.fullscreenElement)
+      };
+      item.fills_window = Math.abs(rect.x) <= 2 && Math.abs(rect.y) <= 2 &&
+        rect.width >= root.clientWidth - 2 && rect.height >= root.clientHeight - 2;
+      document.dispatchEvent(new KeyboardEvent("keydown", {key: "Escape", bubbles: true}));
+      await frame();
+      item.closed = !document.querySelector(".report-expanded");
+      item.scroll_restored = Math.abs(window.scrollY - scroll) <= 2;
+    }
+    results.push(item);
+  }
+  return results;
+}
+"""
+
+
+def inspect_diagrams(page: Any) -> list[dict[str, Any]]:
+    """Exercise each diagram's expand toggle; run after the screenshot."""
+    return list(page.evaluate(_DIAGRAM_PROBE))
+
+
 def inspect_page(page: Any) -> dict[str, Any]:
     return dict(page.evaluate(_PAGE_PROBE, 2_000))
 
@@ -755,12 +799,25 @@ def build_verification_receipt(
         ):
             add("report-hook.status", "report_hook", "error", str(result.get("message", "report-owned verification failed")), evidence=result)
 
+    diagrams = list(probe.get("diagrams", []))
+    for item in diagrams:
+        number = int(item.get("index", 0)) + 1
+        if not item.get("toggle"):
+            add(f"diagrams.no-toggle.{number}", "diagrams", "warning",
+                "rendered diagram has no expand toggle; copy the current reading-navigation.html "
+                "from executable_reports.presentation", evidence=item)
+        elif not (item.get("fills_window") and item.get("closed") and item.get("scroll_restored")
+                  and not item.get("expanded", {}).get("screen_fullscreen")):
+            add(f"diagrams.toggle-failed.{number}", "diagrams", "error",
+                "diagram toggle must fill the browser window without screen full screen, "
+                "close with Escape, and keep the reading position", evidence=item)
+
     if probe.get("screenshot_error"):
         add("evidence.screenshot", "evidence", "warning", f"viewport screenshot failed: {probe['screenshot_error']}")
 
     errors = sum(p["severity"] == "error" for p in problems)
     warnings = sum(p["severity"] == "warning" for p in problems)
-    categories = ("navigation", "runtime", "resources", "layout", "views", "report_hook", "evidence")
+    categories = ("navigation", "runtime", "resources", "layout", "views", "diagrams", "report_hook", "evidence")
     checks = []
     for category in categories:
         related = [p for p in problems if p["category"] == category]
@@ -788,6 +845,7 @@ def build_verification_receipt(
         "page": dict(probe.get("page", {})),
         "layout": {"document": document},
         "views": views,
+        "diagrams": diagrams,
         "report_hook": hook,
         "evidence": {
             "receipt": VERIFY_RECEIPT,
@@ -852,6 +910,8 @@ def verify_report(
                     probe["screenshot_error"] = _bounded(error, 4_000)
                     screenshot.unlink(missing_ok=True)
                 screenshot_ms = round((time.perf_counter() - shot_started) * 1000)
+            # The toggle check clicks and scrolls, so it runs after the screenshot.
+            probe["diagrams"] = inspect_diagrams(session.page)
             return build_verification_receipt(
                 target_sha256=sha256(root / HTML),
                 response_status=session.response_status,
