@@ -17,3 +17,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["recipe_cache"]
+
+[tool.uv]
+exclude-newer = "7 days"

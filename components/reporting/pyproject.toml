@@ -36,3 +36,6 @@ report = "executable_reports.app:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/executable_reports"]
+
+[tool.uv]
+exclude-newer = "7 days"

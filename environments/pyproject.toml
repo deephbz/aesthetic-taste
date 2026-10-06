@@ -42,6 +42,7 @@ default = [
 
 [tool.uv]
 default-groups = []
+exclude-newer = "7 days"
 package = false
 
 [tool.uv.sources]
